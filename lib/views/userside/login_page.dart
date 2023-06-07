@@ -1,3 +1,4 @@
+import 'package:dspamph/views/userside/permission_popup.dart';
 import 'package:flutter/material.dart';
 // import 'package:dspamph/views/userside/permission_popup.dart';
 
@@ -102,7 +103,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PermissionPopup()));
+              },
               child: Container(
                 width: 150,
                 height: 40,

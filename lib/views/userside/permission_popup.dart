@@ -1,4 +1,7 @@
+import 'package:dspamph/views/userside/homepage.dart';
 import 'package:flutter/material.dart';
+
+import 'login_page.dart';
 
 class PermissionPopup extends StatefulWidget {
   @override
@@ -6,7 +9,7 @@ class PermissionPopup extends StatefulWidget {
 }
 
 class _PermissionPopupState extends State<PermissionPopup> {
-  bool allowPermission = false;
+  // bool allowPermission = false;
 
   @override
   void initState() {
@@ -14,9 +17,9 @@ class _PermissionPopupState extends State<PermissionPopup> {
     // initialization
   }
 
-  void denyPermission() {
-    // permission logic here
-  }
+  // void denyPermission() {
+  //   // permission logic here
+  // }
 
   // void allowPermission() {
   //   // permission logic here
@@ -35,13 +38,17 @@ class _PermissionPopupState extends State<PermissionPopup> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               TextButton(
-                onPressed: denyPermission,
+                onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+              },
                 child: Text('DENY'),
               ),
-              // TextButton(
-              //   onPressed: allowPermission,
-              //   child: Text('ALLOW'),
-              // ),
+              TextButton(
+                onPressed:() {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                child: Text('ALLOW'),
+              ),
             ],
           ),
         ],

@@ -31,7 +31,7 @@ class _ReportSpamsState extends State<ReportSpams> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                    'By agreeing to the terms and conditions, you partake into contributing...'),
+                  'By agreeing to the terms and conditions, you partake into contributing...'),
                 CheckboxListTile(
                   value: agreedToTerms,
                   onChanged: (value) {
@@ -57,13 +57,14 @@ class _ReportSpamsState extends State<ReportSpams> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Report Spams'),
-      ),
-      body: Column(
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Report Spams'),
+    ),
+    body: Center(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -83,6 +84,6 @@ class _ReportSpamsState extends State<ReportSpams> {
           ),
         ],
       ),
-    );
-  }
-}
+    ),
+  );
+}}
