@@ -1,18 +1,10 @@
-import 'package:dspamph/selection_page.dart';
 import 'package:flutter/material.dart';
+import 'package:dspamph/selection_page.dart';
 import 'package:dspamph/views/userside/view_spam_analytics.dart';
+class AppDrawer extends StatelessWidget {
+  final BuildContext context;
 
-class AppDrawer extends StatefulWidget {
-  @override
-  _AppDrawerState createState() => _AppDrawerState();
-}
-
-class _AppDrawerState extends State<AppDrawer> {
-  @override
-  void initState() {
-    super.initState();
-    // Add any initialization code here
-  }
+  const AppDrawer(this.context);
 
   void logout() {
     // Implement your logout logic here
@@ -24,13 +16,23 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: ListView(
+    return Drawer(
+      child: ListView(
         children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Text(
+              'Settings',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          ),
           ListTile(
+            leading: Icon(Icons.settings),
             title: Text('View Spam Analytics'),
             onTap: () {
               Navigator.push(
@@ -40,12 +42,14 @@ class _AppDrawerState extends State<AppDrawer> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.person),
             title: Text('Switch Account'),
             onTap: () {
               // Implement your switch account logic here
             },
           ),
           ListTile(
+            leading: Icon(Icons.settings),
             title: Text('Preferences'),
             onTap: () {
               // Implement your preferences logic here

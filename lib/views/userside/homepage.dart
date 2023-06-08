@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'app_drawer.dart';
+import 'report_spams.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -6,6 +8,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -15,12 +19,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.grey,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            // insert drawer - for function phase
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu, color: Colors.white),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+            );
           },
         ),
         title: Text(
@@ -28,8 +37,13 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.white),
         ),
       ),
+      drawer: Builder(
+        builder: (BuildContext context) {
+          return AppDrawer(context);
+        },
+      ),
       body: ListView.builder(
-        itemCount: 10, // Replace with your actual number of SMS messages
+        itemCount: 20, // Replace with your actual number of SMS messages
         itemBuilder: (context, index) {
           return ListTile(
             leading: CircleAvatar(
@@ -38,7 +52,12 @@ class _HomePageState extends State<HomePage> {
             title: Text('Phone Number'),
             subtitle: Text('Message Overview'),
             onTap: () {
-              // Implement your logic to navigate to message details page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MessageDetailsPage(),
+                ),
+              );
             },
           );
         },
@@ -47,11 +66,31 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton.icon(
           onPressed: () {
-            // Implement your logic for reporting spam
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReportSpams(totalSpamMessages: 10),
+              ),
+            );
           },
           icon: Icon(Icons.report),
           label: Text('REPORT SPAMS'),
         ),
+      ),
+    );
+  }
+}
+
+class MessageDetailsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Implement your message details page here
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Message Details'),
+      ),
+      body: Center(
+        child: Text('Message Details Page'),
       ),
     );
   }
