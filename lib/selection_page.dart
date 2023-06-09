@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dspamph/views/userside/login_page.dart';
+import 'package:dspamph/views/adminside/login_admin.dart';
 
 class SelectionPage extends StatefulWidget {
   @override
@@ -22,9 +23,9 @@ class _SelectionPageState extends State<SelectionPage> {
           children: [
             Image.asset(
               'images/dspamphlogo.png',
-              width: 150, // Adjust the width to your desired size
-              height: 150, // Adjust the height to your desired size
-            ), // Replace with your logo image
+              width: 150, 
+              height: 150, 
+            ), 
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -38,7 +39,10 @@ class _SelectionPageState extends State<SelectionPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Add route to admin login page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginAdmin()),
+                );
               },
               child: Text('Admin'),
             ),

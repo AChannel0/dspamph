@@ -1,6 +1,6 @@
-import 'package:dspamph/views/userside/permission_popup.dart';
+import 'package:dspamph/selection_page.dart';
 import 'package:flutter/material.dart';
-// import 'package:dspamph/views/userside/permission_popup.dart';
+import 'package:dspamph/views/userside/permission_popup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,29 +8,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // String number = '';
-  // String otp = '';
-
-  @override
-  void initState() {
-    super.initState();
-    // Add any initialization code here
-  }
-
-  // void sendOTP() {
-  //   // Implement your logic to send OTP to the user's number
-  // }
-
-  // void login() {
-  //   // Implement your login logic here
-  //   bool loggedIn = true; // Replace with your login logic
-  //   if (loggedIn) {
-  //     showDialog(
-  //       context: context,
-  //       builder: (context) => PermissionPopup(),
-  //     );
-  //   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 100),
+            SizedBox(height: 50),
             Container(
               height: 100,
               width: 100,
@@ -55,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 100),
+            SizedBox(height: 50),
             SizedBox(
               width: 100,
               child: TextField(
@@ -104,7 +81,8 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => PermissionPopup()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PermissionPopup()));
               },
               child: Container(
                 width: 150,
@@ -116,6 +94,31 @@ class _LoginPageState extends State<LoginPage> {
                 child: Center(
                   child: Text(
                     'LOGIN',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10), // Add this SizedBox for spacing
+            TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SelectionPage()));
+              },
+              child: Container(
+                width: 150,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Center(
+                  child: Text(
+                    'GO BACK',
                     style: TextStyle(
                       color: const Color.fromARGB(255, 0, 0, 0),
                       fontSize: 16,
