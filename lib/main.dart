@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:dspamph/selection_page.dart';
 // import 'package:dspamph/views/userside/login_page.dart';
 
-void main() => runApp(DSpamPhApp());
+void main() => runApp(const DSpamPhApp());
 
 class DSpamPhApp extends StatelessWidget {
+  const DSpamPhApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,7 +16,7 @@ class DSpamPhApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: SelectionPage(), // temporary
+      home: const SelectionPage(), // temporary
     );
   }
 }

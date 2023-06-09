@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ReportDetails extends StatefulWidget {
+  const ReportDetails({super.key});
+
   @override
   _ReportDetailsState createState() => _ReportDetailsState();
 }
@@ -16,9 +18,9 @@ class _ReportDetailsState extends State<ReportDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Report Details'),
+        title: const Text('Report Details'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

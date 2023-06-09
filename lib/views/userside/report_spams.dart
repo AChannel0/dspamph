@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ReportSpams extends StatefulWidget {
   final int totalSpamMessages;
 
-  ReportSpams({required this.totalSpamMessages});
+  const ReportSpams({super.key, required this.totalSpamMessages});
 
   @override
   _ReportSpamsState createState() => _ReportSpamsState();
@@ -26,11 +26,11 @@ class _ReportSpamsState extends State<ReportSpams> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Terms and Conditions'),
+            title: const Text('Terms and Conditions'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                const Text(
                   'By agreeing to the terms and conditions, you partake into contributing...'),
                 CheckboxListTile(
                   value: agreedToTerms,
@@ -39,7 +39,7 @@ class _ReportSpamsState extends State<ReportSpams> {
                       agreedToTerms = value!;
                     });
                   },
-                  title: Text('I agree'),
+                  title: const Text('I agree'),
                 ),
               ],
             ),
@@ -48,7 +48,7 @@ class _ReportSpamsState extends State<ReportSpams> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('Close'),
+                child: const Text('Close'),
               ),
             ],
           );
@@ -61,26 +61,26 @@ class _ReportSpamsState extends State<ReportSpams> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: Text('Report Spams'),
+      title: const Text('Report Spams'),
     ),
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Total number of spams to report:',
             style: TextStyle(fontSize: 20),
           ),
           Text(
             widget.totalSpamMessages.toString(),
-            style: TextStyle(fontSize: 30),
+            style: const TextStyle(fontSize: 30),
           ),
-          Text('spam messages'),
-          SizedBox(height: 20),
+          const Text('spam messages'),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: report,
-            child: Text('REPORT'),
+            child: const Text('REPORT'),
           ),
         ],
       ),

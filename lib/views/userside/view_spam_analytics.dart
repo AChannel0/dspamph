@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ViewSpamAnalytics extends StatefulWidget {
+  const ViewSpamAnalytics({super.key});
+
   @override
   _ViewSpamAnalyticsState createState() => _ViewSpamAnalyticsState();
 }
@@ -16,21 +18,21 @@ class _ViewSpamAnalyticsState extends State<ViewSpamAnalytics> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Reports History'),
-        titleTextStyle: TextStyle(color: Colors.white),
+        title: const Text('User Reports History'),
+        titleTextStyle: const TextStyle(color: Colors.white),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Current Date',
             style: TextStyle(fontSize: 20),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             color: Colors.grey[200],
-            child: Column(
+            child: const Column(
               children: [
                 Text(
                   'TOTAL SPAM REPORTS',

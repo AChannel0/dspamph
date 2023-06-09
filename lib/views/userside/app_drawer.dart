@@ -4,13 +4,13 @@ import 'package:dspamph/views/userside/view_spam_analytics.dart';
 class AppDrawer extends StatelessWidget {
   final BuildContext context;
 
-  const AppDrawer(this.context);
+  const AppDrawer(this.context, {super.key});
 
   void logout() {
     // Implement your logout logic here
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => SelectionPage()),
+      MaterialPageRoute(builder: (context) => const SelectionPage()),
     );
   }
 
@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
-            child: Text(
+            child: const Text(
               'Settings',
               style: TextStyle(
                 color: Colors.white,
@@ -32,31 +32,31 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('View Spam Analytics'),
+            leading: const Icon(Icons.settings),
+            title: const Text('View Spam Analytics'),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ViewSpamAnalytics()),
+                MaterialPageRoute(builder: (context) => const ViewSpamAnalytics()),
               );
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Switch Account'),
+            leading: const Icon(Icons.person),
+            title: const Text('Switch Account'),
             onTap: () {
               // Implement your switch account logic here
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Preferences'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Preferences'),
             onTap: () {
               // Implement your preferences logic here
             },
           ),
           ListTile(
-            title: Text(
+            title: const Text(
               'Logout',
               style: TextStyle(color: Colors.orange),
             ),

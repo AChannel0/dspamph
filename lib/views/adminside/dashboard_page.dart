@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
@@ -12,7 +14,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: const Text('Dashboard'),
       ),
       body: Center(
         child: Column(
@@ -22,7 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
               width: 200,
               height: 200,
               color: Colors.blue,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Analytics Container 1',
                   style: TextStyle(
@@ -32,12 +34,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: 200,
               height: 200,
               color: Colors.green,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Analytics Container 2',
                   style: TextStyle(
@@ -47,12 +49,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: 200,
               height: 200,
               color: Colors.orange,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Analytics Container 3',
                   style: TextStyle(

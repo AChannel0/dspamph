@@ -3,6 +3,8 @@ import 'app_drawer.dart';
 import 'report_spams.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -25,14 +27,14 @@ class _HomePageState extends State<HomePage> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: Icon(Icons.menu, color: Colors.white),
+              icon: const Icon(Icons.menu, color: Colors.white),
               onPressed: () {
                 _scaffoldKey.currentState!.openDrawer();
               },
             );
           },
         ),
-        title: Text(
+        title: const Text(
           'SMS SPAMS HISTORY',
           style: TextStyle(color: Colors.white),
         ),
@@ -46,16 +48,16 @@ class _HomePageState extends State<HomePage> {
         itemCount: 20, // Replace with your actual number of SMS messages
         itemBuilder: (context, index) {
           return ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               child: Icon(Icons.message),
             ),
-            title: Text('Phone Number'),
-            subtitle: Text('Message Overview'),
+            title: const Text('Phone Number'),
+            subtitle: const Text('Message Overview'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MessageDetailsPage(),
+                  builder: (context) => const MessageDetailsPage(),
                 ),
               );
             },
@@ -69,12 +71,12 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ReportSpams(totalSpamMessages: 10),
+                builder: (context) => const ReportSpams(totalSpamMessages: 10),
               ),
             );
           },
-          icon: Icon(Icons.report),
-          label: Text('REPORT SPAMS'),
+          icon: const Icon(Icons.report),
+          label: const Text('REPORT SPAMS'),
         ),
       ),
     );
@@ -82,14 +84,16 @@ class _HomePageState extends State<HomePage> {
 }
 
 class MessageDetailsPage extends StatelessWidget {
+  const MessageDetailsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Implement your message details page here
     return Scaffold(
       appBar: AppBar(
-        title: Text('Message Details'),
+        title: const Text('Message Details'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Message Details Page'),
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AnalyticsPage extends StatefulWidget {
+  const AnalyticsPage({super.key});
+
   @override
   _AnalyticsPageState createState() => _AnalyticsPageState();
 }
@@ -10,7 +12,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analytics'),
+        title: const Text('Analytics'),
       ),
       body: Center(
         child: Column(
@@ -20,7 +22,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               width: 200,
               height: 200,
               color: Colors.blue,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Analytics Container 1',
                   style: TextStyle(
@@ -30,12 +32,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: 200,
               height: 200,
               color: Colors.green,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Analytics Container 2',
                   style: TextStyle(
@@ -45,12 +47,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: 200,
               height: 200,
               color: Colors.orange,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Analytics Container 3',
                   style: TextStyle(

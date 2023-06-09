@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:dspamph/views/adminside/dashboard_page.dart';
 
 class LoginAdmin extends StatefulWidget {
+  const LoginAdmin({super.key});
+
   @override
   _LoginAdminState createState() => _LoginAdminState();
 }
@@ -12,18 +14,18 @@ class _LoginAdminState extends State<LoginAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 50),
-            Container(
+            const SizedBox(height: 50),
+            SizedBox(
               height: 100,
               width: 100,
               child: Image.asset('images/dspamphlogo.png'),
             ),
-            SizedBox(height: 10),
-            Center(
+            const SizedBox(height: 10),
+            const Center(
               child: Text(
                 'D-SpamPH',
                 style: TextStyle(
@@ -32,7 +34,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                 ),
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             SizedBox(
               width: 100,
               child: TextField(
@@ -41,14 +43,14 @@ class _LoginAdminState extends State<LoginAdmin> {
                   labelText: 'Admin Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.grey),
+                    borderSide: const BorderSide(color: Colors.grey),
                   ),
                   filled: true,
                   fillColor: Colors.grey[200],
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SizedBox(
               width: 100,
               child: TextField(
@@ -57,7 +59,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                   labelText: 'Admin Password',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.grey),
+                    borderSide: const BorderSide(color: Colors.grey),
                   ),
                   filled: true,
                   fillColor: Colors.grey[200],
@@ -78,11 +80,11 @@ class _LoginAdminState extends State<LoginAdmin> {
             //     ),
             //   ),
             // ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DashboardPage()));
+                    MaterialPageRoute(builder: (context) => const DashboardPage()));
               },
               child: Container(
                 width: 150,
@@ -91,11 +93,11 @@ class _LoginAdminState extends State<LoginAdmin> {
                   color: Colors.grey,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'LOGIN',
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 0, 0, 0),
+                      color: Color.fromARGB(255, 0, 0, 0),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -103,11 +105,11 @@ class _LoginAdminState extends State<LoginAdmin> {
                 ),
               ),
             ),
-            SizedBox(height: 10), // Add this SizedBox for spacing
+            const SizedBox(height: 10), // Add this SizedBox for spacing
             TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SelectionPage()));
+                    MaterialPageRoute(builder: (context) => const SelectionPage()));
               },
               child: Container(
                 width: 150,
@@ -116,11 +118,11 @@ class _LoginAdminState extends State<LoginAdmin> {
                   color: Colors.grey,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'GO BACK',
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 0, 0, 0),
+                      color: Color.fromARGB(255, 0, 0, 0),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
