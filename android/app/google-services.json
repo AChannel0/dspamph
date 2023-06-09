@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "119755831428",
+    "project_id": "phone-firebase-7cefc",
+    "storage_bucket": "phone-firebase-7cefc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119755831428:android:d9502fa89ac84fdf4baad1",
+        "android_client_info": {
+          "package_name": "com.example.dspamph"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119755831428-cm4929b09l8c25r919ksqvoskbaii0km.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHJ-YlI5UCE0rBw0am-urENGNu9Fx_9SY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119755831428-cm4929b09l8c25r919ksqvoskbaii0km.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
