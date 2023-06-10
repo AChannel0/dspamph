@@ -20,12 +20,12 @@ class _SelectionPageState extends State<SelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 100),
+        padding: const EdgeInsets.only(top: 150),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image.asset(
-              'images/dspamphlogo.png',
+              'assets/images/dspamphlogo.png',
               width: 150,
               height: 150,
             ),
@@ -37,7 +37,7 @@ class _SelectionPageState extends State<SelectionPage> {
                 fontSize: 20,
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             const Text(
               'Welcome, User!',
               style: TextStyle(
@@ -54,7 +54,7 @@ class _SelectionPageState extends State<SelectionPage> {
                 color: Color.fromARGB(255, 110, 110, 110),
               ),
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 120),
             Align(
               alignment: Alignment.center,
               child: SizedBox(
@@ -77,7 +77,7 @@ class _SelectionPageState extends State<SelectionPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Align(
               alignment: Alignment.center,
               child: SizedBox(

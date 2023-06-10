@@ -1,4 +1,3 @@
-import 'package:dspamph/selection_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dspamph/views/adminside/dashboard_page.dart';
 
@@ -13,16 +12,30 @@ class _LoginAdminState extends State<LoginAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.black,
+          ),
+        ),
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 150),
             SizedBox(
               height: 100,
               width: 100,
-              child: Image.asset('images/dspamphlogo.png'),
+              child: Image.asset('assets/images/dspamphlogo.png'),
             ),
             const SizedBox(height: 10),
             const Center(
@@ -83,44 +96,21 @@ class _LoginAdminState extends State<LoginAdmin> {
             const SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const DashboardPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DashboardPage()));
               },
               child: Container(
                 width: 150,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.orange,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: const Center(
                   child: Text(
                     'LOGIN',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10), // Add this SizedBox for spacing
-            TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SelectionPage()));
-              },
-              child: Container(
-                width: 150,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: const Center(
-                  child: Text(
-                    'GO BACK',
                     style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 0),
                       fontSize: 16,

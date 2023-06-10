@@ -42,19 +42,19 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'images/dspamphlogo.png',
+                'assets/images/dspamphlogo.png',
                 width: 150,
                 height: 150,
               ),
               const SizedBox(
-                height: 25,
+                height: 20,
               ),
               const Text(
                 "Phone Verification",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
-                height: 30,
+                height: 100,
               ),
               Container(
                 height: 55,

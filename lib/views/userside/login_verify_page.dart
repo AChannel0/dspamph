@@ -58,7 +58,7 @@ class _VerifyPageState extends State<VerifyPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'images/dspamphlogo.png',
+                'assets/images/dspamphlogo.png',
                 width: 150,
                 height: 150,
               ),
@@ -98,8 +98,6 @@ class _VerifyPageState extends State<VerifyPage> {
                 height: 45,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 160, 126, 67),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () {},
