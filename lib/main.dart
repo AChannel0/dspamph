@@ -26,9 +26,10 @@ class DSpamPhApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      initialRoute: 'selection',
+      initialRoute: 'load',
       debugShowCheckedModeBanner: false,
       routes: {
+        'load': (context) => LoadingScreen(),
         'selection': (context) => const SelectionPage(),
         'phone': (context) => const LoginPage(),
         'verify': (context) => const VerifyPage(),

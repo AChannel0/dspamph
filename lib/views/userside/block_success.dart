@@ -28,7 +28,7 @@ class BlockSuccessPage extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 50),
               child: Text(
-                'Spam message and number successfully blocked!',
+                'Spam message and number have been blocked successfully!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 30,

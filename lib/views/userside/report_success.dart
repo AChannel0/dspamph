@@ -27,7 +27,7 @@ class ReportSuccessPage extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 50),
               child: Text(
-                'The spam messages has been reported successfully!',
+                'The spam message(s) have been reported successfully!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 30,
