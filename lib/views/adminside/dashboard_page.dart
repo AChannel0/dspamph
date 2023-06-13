@@ -27,7 +27,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 );
               },
               child: Container(
-                width: 400,
+                width: 300,
                 height: 200,
                 decoration: BoxDecoration(
                   color: Colors.green,
@@ -44,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -53,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 );
               },
               child: Container(
-                width: 400,
+                width: 300,
                 height: 200,
                 decoration: BoxDecoration(
                   color: Colors.blue,
@@ -70,7 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -79,7 +79,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 );
               },
               child: Container(
-                width: 400,
+                width: 300,
                 height: 200,
                 decoration: BoxDecoration(
                   color: Colors.red,

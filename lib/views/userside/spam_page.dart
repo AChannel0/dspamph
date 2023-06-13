@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'block_success.dart';
 
 class SpamPage extends StatefulWidget {
   const SpamPage({Key? key}) : super(key: key);
@@ -19,7 +20,12 @@ class _SpamPageState extends State<SpamPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BlockSuccessPage(),
+                  ),
+                );
                 // Implement your logic for blocking spam and reporting
                 // Also navigate to the report details page (number 9 page)
               },
