@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dspamph/views/adminside/dashboard_page.dart';
 
 class LoginAdmin extends StatefulWidget {
-  const LoginAdmin({super.key});
+  const LoginAdmin({Key? key}) : super(key: key);
 
   @override
   _LoginAdminState createState() => _LoginAdminState();
@@ -31,7 +31,7 @@ class _LoginAdminState extends State<LoginAdmin> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 150),
+            const SizedBox(height: 50),
             SizedBox(
               height: 150,
               width: 150,
@@ -47,59 +47,55 @@ class _LoginAdminState extends State<LoginAdmin> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            Text(
+              'Welcome! Please enter your administrative account.',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color.fromARGB(255, 110, 110, 110),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 100),
+            SizedBox(
+              width: 100,
+              child: TextField(
+                onChanged: (value) {},
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 100,
+              child: TextField(
+                onChanged: (value) {},
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
+              ),
+            ),
             const SizedBox(height: 50),
-            SizedBox(
-              width: 100,
-              child: TextField(
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Admin Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 100,
-              child: TextField(
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Admin Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-            ),
-            // SizedBox(height: 10),
-            // Align(
-            //   alignment: Alignment.centerLeft,
-            //   child: TextButton(
-            //     onPressed: () {},
-            //     child: Text(
-            //       'Click here to send OTP',
-            //       style: TextStyle(
-            //         color: Colors.blue,
-            //         fontSize: 12,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            const SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DashboardPage()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DashboardPage()),
+                );
               },
               child: Container(
                 width: 150,
