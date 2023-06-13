@@ -76,7 +76,7 @@ class _SpamPageState extends State<SpamPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Spam Page'),
+        title: const Text('Spam Details'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -85,18 +85,23 @@ class _SpamPageState extends State<SpamPage> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(
+            height: 20,
+          ),
           const Text(
             'Phone Number',
-            style: TextStyle(color: Colors.orange, fontSize: 20),
+            style: TextStyle(color: Colors.deepOrange, fontSize: 20),
           ),
           const CircleAvatar(
             radius: 40,
             child: Icon(Icons.account_circle),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(
+            height: 50,
+          ),
           Container(
             padding: const EdgeInsets.all(16),
             child: const Text('Complete message detail'),

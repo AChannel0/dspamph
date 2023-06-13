@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_drawer.dart';
 import 'report_spams.dart';
+import 'spam_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
         itemCount: 20, // Replace with your actual number of SMS messages
         itemBuilder: (context, index) {
+          // Call the readMessages() function
           return ListTile(
             leading: const CircleAvatar(
               child: Icon(Icons.message),
@@ -57,7 +59,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MessageDetailsPage(),
+                  builder: (context) => const SpamPage(),
                 ),
               );
             },
@@ -71,7 +73,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ReportSpams(totalSpamMessages: 10),
+                builder: (context) => const ReportSpams(totalSpamMessages: 20),
               ),
             );
           },
@@ -83,19 +85,19 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class MessageDetailsPage extends StatelessWidget {
-  const MessageDetailsPage({super.key});
+// class MessageDetailsPage extends StatelessWidget {
+//   const MessageDetailsPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    // Implement your message details page here
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Message Details'),
-      ),
-      body: const Center(
-        child: Text('Message Details Page'),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     // Implement your message details page here
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Message Details'),
+//       ),
+//       body: const Center(
+//         child: Text('Message Details Page'),
+//       ),
+//     );
+//   }
+// }

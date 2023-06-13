@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dspamph/selection_page.dart';
 import 'package:dspamph/views/userside/view_spam_analytics.dart';
+
 class AppDrawer extends StatelessWidget {
   final BuildContext context;
 
@@ -37,7 +38,8 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ViewSpamAnalytics()),
+                MaterialPageRoute(
+                    builder: (context) => const ViewSpamAnalytics()),
               );
             },
           ),

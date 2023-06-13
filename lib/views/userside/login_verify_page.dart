@@ -1,3 +1,4 @@
+import 'package:dspamph/views/userside/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
@@ -100,7 +101,13 @@ class _VerifyPageState extends State<VerifyPage> {
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()),
+                      );
+                    },
                     child: const Text("Verify Phone Number")),
               ),
               Row(

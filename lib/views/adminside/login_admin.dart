@@ -33,8 +33,8 @@ class _LoginAdminState extends State<LoginAdmin> {
           children: [
             const SizedBox(height: 150),
             SizedBox(
-              height: 100,
-              width: 100,
+              height: 150,
+              width: 150,
               child: Image.asset('assets/images/dspamphlogo.png'),
             ),
             const SizedBox(height: 10),
