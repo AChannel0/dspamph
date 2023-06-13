@@ -28,95 +28,100 @@ class _LoginAdminState extends State<LoginAdmin> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 50),
-            SizedBox(
-              height: 150,
-              width: 150,
-              child: Image.asset('assets/images/dspamphlogo.png'),
-            ),
-            const SizedBox(height: 10),
-            const Center(
-              child: Text(
-                'D-SpamPH',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Welcome! Please enter your administrative account.',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color.fromARGB(255, 110, 110, 110),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 100),
-            SizedBox(
-              width: 100,
-              child: TextField(
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 100,
-              child: TextField(
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-            ),
-            const SizedBox(height: 50),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const DashboardPage()),
-                );
-              },
-              child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 50),
+              SizedBox(
+                height: 150,
                 width: 150,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(10.0),
+                child: Image.asset('assets/images/dspamphlogo.png'),
+              ),
+              const SizedBox(height: 10),
+              const Center(
+                child: Text(
+                  'D-SpamPH',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
-                child: const Center(
-                  child: Text(
-                    'LOGIN',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Welcome! Please enter your administrative account.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 110, 110, 110),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 100),
+              SizedBox(
+                width:
+                    200, // Adjust the width to fit within the available space
+                child: TextField(
+                  onChanged: (value) {},
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width:
+                    200, // Adjust the width to fit within the available space
+                child: TextField(
+                  onChanged: (value) {},
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 50),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DashboardPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 150,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'LOGIN',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
