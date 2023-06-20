@@ -2,10 +2,11 @@
 // import 'dart:js';
 import 'package:dspamph/views/userside/loading_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:dspamph/selection_page.dart';
-import 'package:dspamph/views/userside/login_page.dart';
-import 'package:dspamph/views/userside/login_verify_page.dart';
-import 'package:dspamph/views/userside/homepage.dart';
+// import 'package:dspamph/selection_page.dart';
+// import 'package:dspamph/views/userside/login_page.dart';
+// import 'package:dspamph/views/userside/login_verify_page.dart';
+// import 'package:dspamph/views/userside/homepage.dart';
+// import 'package:dspamph/views/userside/permission_popup.dart';
 
 void main() {
   runApp(const DSpamPhApp());
@@ -30,10 +31,10 @@ class DSpamPhApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         'load': (context) => LoadingScreen(),
-        'selection': (context) => const SelectionPage(),
-        'phone': (context) => const LoginPage(),
-        'verify': (context) => const VerifyPage(),
-        'home': (context) => const HomePage(),
+        // 'selection': (context) => const SelectionPage(),
+        // 'phone': (context) => const LoginPage(),
+        // 'verify': (context) => const VerifyPage(),
+        // 'permission_popup': (context) => const PermissionPopup(),
       },
     );
   }

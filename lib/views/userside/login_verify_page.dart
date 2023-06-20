@@ -1,6 +1,7 @@
-import 'package:dspamph/views/userside/homepage.dart';
+// import 'package:dspamph/views/userside/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'permission_sms.dart';
 
 class VerifyPage extends StatefulWidget {
   const VerifyPage({Key? key}) : super(key: key);
@@ -105,7 +106,7 @@ class _VerifyPageState extends State<VerifyPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const HomePage()),
+                            builder: (context) => const PermissionSMS()),
                       );
                     },
                     child: const Text("Verify Phone Number")),

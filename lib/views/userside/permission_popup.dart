@@ -1,7 +1,12 @@
-import 'package:dspamph/views/userside/homepage.dart';
-import 'package:flutter/material.dart';
+// import 'dart:html';
 
+// import 'package:dspamph/views/userside/homepage.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'block_success.dart';
 import 'login_page.dart';
+import 'package:flutter/services.dart';
+import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 
 class PermissionPopup extends StatefulWidget {
   const PermissionPopup({super.key});
@@ -41,13 +46,26 @@ class _PermissionPopupState extends State<PermissionPopup> {
             children: [
               TextButton(
                 onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
-              },
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()));
+                },
                 child: const Text('DENY'),
               ),
               TextButton(
-                onPressed:() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                onPressed: () async {
+                  PermissionStatus smsStatus = await Permission.sms.request();
+                  if (smsStatus == PermissionStatus.granted) {
+                    (context) => const BlockSuccessPage();
+                  }
+                  if (smsStatus == PermissionStatus.denied) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("This permission is recommended")));
+                  }
+                  if (smsStatus == PermissionStatus.permanentlyDenied) {
+                    openAppSettings();
+                  }
                 },
                 child: const Text('ALLOW'),
               ),
