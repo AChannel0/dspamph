@@ -622,9 +622,155 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'spam_page.dart';
+// import 'app_drawer.dart';
+
+// class HomePage extends StatefulWidget {
+//   const HomePage({Key? key}) : super(key: key);
+
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+
+// class _HomePageState extends State<HomePage> {
+//   final SmsQuery _query = SmsQuery();
+//   List<SmsMessage> _messages = [];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter SMS Inbox App',
+//       theme: ThemeData(
+//         primarySwatch: Colors.orange,
+//       ),
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('SMS Spam History'),
+//         ),
+//         drawer: AppDrawer(context),
+//         body: Container(
+//           padding: const EdgeInsets.all(10.0),
+//           child: _messages.isNotEmpty
+//               ? _MessagesListView(
+//                   messages: _messages,
+//                   onTap: (message) {
+//                     _fetchThreadMessages(message).then((threadMessages) {
+//                       Navigator.push(
+//                         context,
+//                         MaterialPageRoute(
+//                           builder: (context) => SpamPage(
+//                             message: message,
+//                             threadMessages: threadMessages,
+//                           ),
+//                         ),
+//                       );
+//                     });
+//                   },
+//                 )
+//               : Center(
+//                   child: Text(
+//                     'No messages to show.\nTap refresh button...',
+//                     style: Theme.of(context).textTheme.titleLarge,
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//         ),
+//         floatingActionButton: FloatingActionButton(
+//           onPressed: () async {
+//             var permission = await Permission.sms.status;
+//             if (permission.isGranted) {
+//               final messages = await _query.querySms(
+//                 kinds: [
+//                   SmsQueryKind.inbox,
+//                 ],
+//                 count: -1,
+//               );
+//               debugPrint('sms inbox messages: ${messages.length}');
+
+//               setState(() {
+//                 _messages = messages;
+//               });
+//             } else {
+//               await Permission.sms.request();
+//             }
+//           },
+//           child: const Icon(Icons.refresh),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Future<List<SmsMessage>> _fetchThreadMessages(SmsMessage message) async {
+//     if (message.threadId != null) {
+//       List<SmsMessage> threadMessages = await _query.querySms(
+//         threadId: message.threadId,
+//         kinds: [SmsQueryKind.inbox],
+//       );
+//       return threadMessages;
+//     }
+//     return [];
+//   }
+// }
+
+// class _MessagesListView extends StatelessWidget {
+//   const _MessagesListView({
+//     Key? key,
+//     required this.messages,
+//     required this.onTap,
+//   }) : super(key: key);
+
+//   final List<SmsMessage> messages;
+//   final Function(SmsMessage) onTap;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Map<String, List<SmsMessage>> groupedMessages = {};
+//     for (var message in messages) {
+//       String sender = message.sender!;
+//       if (groupedMessages.containsKey(sender)) {
+//         groupedMessages[sender]!.add(message);
+//       } else {
+//         groupedMessages[sender] = [message];
+//       }
+//     }
+
+//     return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: groupedMessages.length,
+//       itemBuilder: (BuildContext context, int i) {
+//         String contactNumber = groupedMessages.keys.elementAt(i);
+//         List<SmsMessage> contactMessages = groupedMessages[contactNumber]!;
+
+//         SmsMessage latestMessage = contactMessages.first;
+
+//         String messageBody = latestMessage.body ?? '';
+
+//         return ListTile(
+//           title: Text(contactNumber),
+//           subtitle: Text(
+//             messageBody.split('\n').first,
+//             maxLines: 1,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//           onTap: () => onTap(latestMessage),
+//         );
+//       },
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'spam_detection.dart';
 import 'spam_page.dart';
 import 'app_drawer.dart';
 
@@ -638,16 +784,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final SmsQuery _query = SmsQuery();
   List<SmsMessage> _messages = [];
+  SpamDetection spamDetection = SpamDetection();
+  String prediction = '';
 
   @override
   void initState() {
     super.initState();
+    spamDetection.loadModel();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter SMS Inbox App',
+      title: 'D-SpamPH',
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
@@ -678,7 +827,7 @@ class _HomePageState extends State<HomePage> {
               : Center(
                   child: Text(
                     'No messages to show.\nTap refresh button...',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -695,8 +844,18 @@ class _HomePageState extends State<HomePage> {
               );
               debugPrint('sms inbox messages: ${messages.length}');
 
+              List<SmsMessage> spamMessages = [];
+
+              for (var message in messages) {
+                String prediction =
+                    await spamDetection.predictMessage(message.body ?? '');
+                if (prediction == 'Spam') {
+                  spamMessages.add(message);
+                }
+              }
+
               setState(() {
-                _messages = messages;
+                _messages = spamMessages;
               });
             } else {
               await Permission.sms.request();
