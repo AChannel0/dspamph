@@ -2,13 +2,19 @@
 // import 'dart:js';
 import 'package:dspamph/views/userside/loading_screen.dart';
 import 'package:flutter/material.dart';
+// import 'package:tflite/tflite.dart';
 // import 'package:dspamph/selection_page.dart';
 // import 'package:dspamph/views/userside/login_page.dart';
 // import 'package:dspamph/views/userside/login_verify_page.dart';
 // import 'package:dspamph/views/userside/homepage.dart';
 // import 'package:dspamph/views/userside/permission_popup.dart';
 
-void main() {
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Tflite.loadModel(
+  //   model:
+  //       'assets/model_lstm_09.20.23.tflite', // Provide the path to your TFLite model file
+  // );
   runApp(const DSpamPhApp());
 }
 

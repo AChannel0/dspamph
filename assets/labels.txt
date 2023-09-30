@@ -1,2 +1,2 @@
-Not Spam
-Spam
+ham
+spam

@@ -182,20 +182,11 @@
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:flutter_sms_inbox/flutter_sms_inbox.dart'; // Import SmsMessage
 
 class SpamDetection {
   static const String modelPath = 'assets/lstm_model.tflite';
   late Interpreter _interpreter;
-
-  // Future<void> loadModel() async {
-  //   try {
-  //     final interpreterOptions = InterpreterOptions();
-  //     _interpreter =
-  //         await Interpreter.fromAsset(modelPath, options: interpreterOptions);
-  //   } on PlatformException {
-  //     print('Failed to load the TFLite model.');
-  //   }
-  // }
 
   Future<void> loadModel() async {
     try {
@@ -227,8 +218,7 @@ class SpamDetection {
 
       _interpreter.run(inputBuffer, outputBuffer);
 
-      final prediction =
-          outputBuffer[0] > outputBuffer[1] ? 'Not Spam' : 'Spam';
+      final prediction = outputBuffer[0] > outputBuffer[1] ? 'ham' : 'spam';
       return prediction;
     } on PlatformException catch (e) {
       print('Failed to make a prediction: $e');
@@ -265,5 +255,18 @@ class SpamDetection {
         sequenceLength <= maxlen ? sequence : sequence.sublist(0, maxlen);
     paddedSequence.setRange(0, truncatedSequence.length, truncatedSequence);
     return Uint8List.fromList(paddedSequence);
+  }
+
+  Future<List<SmsMessage>> detectSpamMessages(List<SmsMessage> messages) async {
+    List<SmsMessage> spamMessages = [];
+
+    for (var message in messages) {
+      String prediction = await predictMessage(message.body ?? '');
+      if (prediction == 'Spam') {
+        spamMessages.add(message);
+      }
+    }
+
+    return spamMessages;
   }
 }
