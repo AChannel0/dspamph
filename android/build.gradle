@@ -20,7 +20,20 @@ allprojects {
           name 'ossrh-snapshot'
           url 'https://oss.sonatype.org/content/repositories/snapshots'
         }
+        // flatDir {
+        //     dirs 'libs'
+        // }
+        mavenLocal()
     }
+}
+
+dependencies {
+    // compile(name:'tensorflow-lite', ext:'aar')
+    // implementation 'org.tensorflow:tensorflow-lite:0.1.100'
+    // implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:0.1.100'
+    // implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly-SNAPSHOT'
+    // This dependency adds the necessary TF op support.
+    // implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:0.0.0-nightly-SNAPSHOT'
 }
 
 rootProject.buildDir = '../build'
