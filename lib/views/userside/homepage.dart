@@ -1830,7 +1830,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'spam_page.dart';
-import 'app_drawer.dart'; // Import the AppDrawer file
+import 'app_drawer.dart';
+import 'dart:async';
 
 void main() => runApp(MyApp());
 
@@ -1856,12 +1857,40 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final SmsQuery _query = SmsQuery();
-  List<SmsMessage> _spamMessages = [];
+  final StreamController<List<SmsMessage>> _spamMessagesStreamController =
+      StreamController<List<SmsMessage>>(); // Create a StreamController
 
   @override
   void initState() {
     super.initState();
-    _refreshMessages(); // Call _refreshMessages to load data when the app starts.
+    _initSmsListener();
+  }
+
+  @override
+  void dispose() {
+    _spamMessagesStreamController.close(); // Close the stream controller
+    super.dispose();
+  }
+
+  void _initSmsListener() async {
+    await Permission.sms.request();
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      _refreshMessages();
+    });
+    _refreshMessages();
+  }
+
+  void _refreshMessages() async {
+    final messages = await _query.querySms(
+      kinds: [SmsQueryKind.inbox],
+    );
+
+    // Filter spam messages
+    final spamMessages =
+        messages.where((message) => _isSpam(message.body ?? '')).toList();
+
+    // Add the updated list of spam messages to the stream
+    _spamMessagesStreamController.sink.add(spamMessages);
   }
 
   Future<void> _handleMessageTap(SmsMessage message) async {
@@ -1883,50 +1912,38 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Wrap your HomePage in a Scaffold
       appBar: AppBar(
         title: const Text('SMS Spam History'),
       ),
       body: Container(
         padding: const EdgeInsets.all(10.0),
-        child: _spamMessages.isNotEmpty
-            ? _MessagesListView(
-                messages: _spamMessages,
-                onMessageTap: _handleMessageTap,
-              )
-            : Center(
-                child: Text(
-                  'No spam messages to show.',
-                  style: Theme.of(context).textTheme.headline6,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+        child: StreamBuilder(
+          stream: _spamMessagesStreamController.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final spamMessages = snapshot.data as List<SmsMessage>;
+              return spamMessages.isNotEmpty
+                  ? _MessagesListView(
+                      messages: spamMessages,
+                      onMessageTap: _handleMessageTap,
+                    )
+                  : Center(
+                      child: Text(
+                        'No spam messages to show.',
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _refreshMessages,
-        child: const Icon(Icons.refresh),
-      ),
-      drawer: AppDrawer(context), // Include the AppDrawer as the drawer
+      drawer: AppDrawer(context),
     );
-  }
-
-  void _refreshMessages() async {
-    var permission = await Permission.sms.status;
-    if (permission.isGranted) {
-      final messages = await _query.querySms(
-        kinds: [SmsQueryKind.inbox],
-      );
-
-      // Filter spam messages
-      final spamMessages =
-          messages.where((message) => _isSpam(message.body ?? '')).toList();
-
-      setState(() {
-        _spamMessages = spamMessages;
-      });
-    } else {
-      await Permission.sms.request();
-    }
   }
 
   bool _isSpam(String message) {
@@ -1970,11 +1987,10 @@ class _MessagesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, List<SmsMessage>> groupedMessages = {}; // Corrected: Use a Map
+    Map<String, List<SmsMessage>> groupedMessages = {};
 
     for (var message in messages) {
-      String sender = message.address ??
-          'Unknown Sender'; // Use message.address to get the sender's phone number
+      String sender = message.address ?? 'Unknown Sender';
       if (groupedMessages.containsKey(sender)) {
         groupedMessages[sender]!.add(message);
       } else {
@@ -1989,7 +2005,6 @@ class _MessagesListView extends StatelessWidget {
         String contactNumber = groupedMessages.keys.elementAt(i);
         List<SmsMessage> contactMessages = groupedMessages[contactNumber]!;
 
-        // Display contact messages as you prefer
         return ListTile(
           title: Text(contactNumber),
           subtitle: Text(
