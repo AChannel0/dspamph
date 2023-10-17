@@ -1858,7 +1858,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final SmsQuery _query = SmsQuery();
   final StreamController<List<SmsMessage>> _spamMessagesStreamController =
-      StreamController<List<SmsMessage>>(); // Create a StreamController
+      StreamController<List<SmsMessage>>();
+  bool _isControllerClosed = false; // Add this flag
 
   @override
   void initState() {
@@ -1868,7 +1869,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _spamMessagesStreamController.close(); // Close the stream controller
+    _isControllerClosed = true; // Set the flag when closing the controller
+    _spamMessagesStreamController.close();
     super.dispose();
   }
 
@@ -1881,15 +1883,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _refreshMessages() async {
+    if (_isControllerClosed) {
+      return; // Check the flag to prevent adding after closing
+    }
+
     final messages = await _query.querySms(
       kinds: [SmsQueryKind.inbox],
     );
 
-    // Filter spam messages
     final spamMessages =
         messages.where((message) => _isSpam(message.body ?? '')).toList();
 
-    // Add the updated list of spam messages to the stream
     _spamMessagesStreamController.sink.add(spamMessages);
   }
 
