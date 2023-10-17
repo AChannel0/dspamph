@@ -657,10 +657,59 @@
 //   }
 // }
 
+///////////////////////////////////////////////////////////////
+///FROM SIR LOUIE
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// // import 'package:tflite/tflite.dart';
+// import 'package:tflite_flutter/tflite_flutter.dart';
+
+// class SpamPage extends StatelessWidget {
+//   final SmsMessage message;
+
+//   SpamPage({required this.message});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Message Details'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               'Sender: ${message.sender ?? 'Unknown'}',
+//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//             ),
+//             SizedBox(height: 8),
+//             Text(
+//               'Date and Time: ${message.date ?? 'Unknown'}',
+//               style: TextStyle(fontSize: 16),
+//             ),
+//             SizedBox(height: 16),
+//             Text(
+//               'Message Content:',
+//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//             ),
+//             SizedBox(height: 8),
+//             Text(
+//               '${message.body ?? 'No message content'}',
+//               style: TextStyle(fontSize: 16),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+/////////////////////////////////////////////////////
+///REVISED BY CHATGPT
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
-// import 'package:tflite/tflite.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 
 class SpamPage extends StatelessWidget {
   final SmsMessage message;

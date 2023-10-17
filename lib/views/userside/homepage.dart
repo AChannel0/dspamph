@@ -1327,13 +1327,510 @@
 // }
 
 /////////////////////////////////////////////////////////////////
-///
+/// FROM SIR LOUIE
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:tflite_flutter/tflite_flutter.dart'; // Add TFLite import
+// import 'spam_page.dart';
+// import 'dart:typed_data';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'D-SpamPH',
+//       theme: ThemeData(
+//         primarySwatch: Colors.orange,
+//       ),
+//       home: HomePage(),
+//     );
+//   }
+// }
+
+// class HomePage extends StatefulWidget {
+//   const HomePage({Key? key}) : super(key: key);
+
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+
+// class _HomePageState extends State<HomePage> {
+//   final SmsQuery _query = SmsQuery();
+//   List<SmsMessage> _messages = [];
+//   late Interpreter _interpreter; // Define the interpreter
+//   String prediction = '';
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     loadModel();
+//   }
+
+//   Future<void> _handleMessageTap(SmsMessage message) async {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => SpamPage(message: message),
+//       ),
+//     );
+//   }
+
+//   Future<void> loadModel() async {
+//     try {
+//       final interpreterOptions = InterpreterOptions();
+//       _interpreter = await Interpreter.fromAsset(
+//         'assets/lstm_gpt_10.04.23.tflite',
+//         options: interpreterOptions,
+//       );
+//     } catch (e) {
+//       print('Failed to load the TFLite model: $e');
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('SMS Spam History'),
+//       ),
+//       body: Container(
+//         padding: const EdgeInsets.all(10.0),
+//         child: _messages.isNotEmpty
+//             ? _MessagesListView(
+//                 messages: _messages,
+//                 onMessageTap: (_handleMessageTap) {
+//                   _fetchThreadMessages(_handleMessageTap)
+//                       .then((threadMessages) {
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(
+//                         builder: (context) => SpamPage(
+//                           message: _handleMessageTap,
+//                           // threadMessages: threadMessages,
+//                         ),
+//                       ),
+//                     );
+//                   });
+//                   String newMessage = _handleMessageTap.body ?? "";
+//                   print(_handleMessageTap.body);
+//                   print(predictMessage(newMessage));
+//                 },
+//               )
+//             : Center(
+//                 child: Text(
+//                   'No spam messages to show.',
+//                   style: Theme.of(context).textTheme.headline6,
+//                   textAlign: TextAlign.center,
+//                 ),
+//               ),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () async {
+//           var permission = await Permission.sms.status;
+//           if (permission.isGranted) {
+//             final messages = await _query.querySms(
+//               kinds: [SmsQueryKind.inbox],
+//             );
+//             setState(() {
+//               _messages = messages;
+//               // print(_query.querySms);
+//             });
+//           } else {
+//             await Permission.sms.request();
+//           }
+//         },
+//         child: const Icon(Icons.refresh),
+//       ),
+//     );
+//   }
+
+//   Future<List<SmsMessage>> _fetchThreadMessages(SmsMessage message) async {
+//     if (message.threadId != null) {
+//       List<SmsMessage> threadMessages = await _query.querySms(
+//         threadId: message.threadId,
+//         kinds: [SmsQueryKind.inbox],
+//       );
+//       // print(threadMessages);
+//       return threadMessages;
+//     }
+//     return [];
+//   }
+
+//   Future<List<SmsMessage>> detectSpamMessages(List<SmsMessage> messages) async {
+//     List<SmsMessage> spamMessages = [];
+
+//     for (var message in messages) {
+//       String prediction = await predictMessage(message.body ?? '');
+//       if (prediction == 'Spam') {
+//         spamMessages.add(message);
+//       }
+//     }
+
+//     return spamMessages;
+//   }
+
+//   Future<String> predictMessage(String message) async {
+//     if (!_isModelLoaded()) {
+//       throw Exception('TFLite model is not loaded.');
+//     }
+
+//     try {
+//       final input = preprocessMessage(message);
+//       final output = List<double>.filled(2, 0.0); // Output shape (None, 2)
+//       final inputList = [input]; // Input shape (None, 80)
+//       final outputList = [output];
+
+//       final convertedInputList = inputList
+//           .map((list) => list.map((value) => value.toDouble()).toList())
+//           .toList();
+
+//       final inputBuffer = convertedInputList.expand((x) => x).toList();
+//       final outputBuffer = outputList.expand((x) => x).toList();
+
+//       _interpreter.run(inputBuffer, outputBuffer);
+
+//       final prediction = outputBuffer[0] > outputBuffer[1] ? 'Ham' : 'Spam';
+//       return prediction;
+//     } catch (e) {
+//       print('Failed to make a prediction: $e');
+//     }
+//     return 'Unknown';
+//   }
+
+//   bool _isModelLoaded() {
+//     return _interpreter != null;
+//   }
+
+//   String cleanMessage(String message) {
+//     final cleanedText = message.replaceAll(RegExp('[^A-Za-z]'), ' ');
+//     return cleanedText.toLowerCase();
+//   }
+
+//   List<int> encodeMessage(String message) {
+//     final encodedMessage = message.codeUnits;
+//     return encodedMessage;
+//   }
+
+//   Uint8List padSequence(List<int> sequence, {int maxlen = 80}) {
+//     final paddedSequence = List<int>.filled(maxlen, 0);
+//     final sequenceLength = sequence.length;
+//     final truncatedSequence =
+//         sequenceLength <= maxlen ? sequence : sequence.sublist(0, maxlen);
+//     paddedSequence.setRange(0, truncatedSequence.length, truncatedSequence);
+//     return Uint8List.fromList(paddedSequence);
+//   }
+
+//   Uint8List preprocessMessage(String message) {
+//     final cleanedMessage = cleanMessage(message);
+//     final encodedMessage = encodeMessage(cleanedMessage);
+//     final paddedMessage = padSequence(encodedMessage, maxlen: 80);
+//     return paddedMessage;
+//   }
+// }
+
+// class _MessagesListView extends StatelessWidget {
+//   const _MessagesListView({
+//     Key? key,
+//     required this.messages,
+//     required this.onMessageTap,
+//   }) : super(key: key);
+
+//   final List<SmsMessage> messages;
+//   final Function(SmsMessage) onMessageTap; // Callback function
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Map<String, List<SmsMessage>> groupedMessages = {};
+//     for (var message in messages) {
+//       String sender = message.sender!;
+//       if (groupedMessages.containsKey(sender)) {
+//         groupedMessages[sender]!.add(message);
+//       } else {
+//         groupedMessages[sender] = [message];
+//       }
+//     }
+
+//     return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: groupedMessages.length,
+//       itemBuilder: (BuildContext context, int i) {
+//         String contactNumber = groupedMessages.keys.elementAt(i);
+//         List<SmsMessage> contactMessages = groupedMessages[contactNumber]!;
+
+//         SmsMessage latestMessage = contactMessages.first;
+
+//         String messageBody = latestMessage.body ?? '';
+
+//         return ListTile(
+//           title: Text(contactNumber),
+//           subtitle: Text(
+//             messageBody.split('\n').first,
+//             maxLines: 1,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//           onTap: () =>
+//               onMessageTap(latestMessage), // Trigger the callback function
+//         );
+//       },
+//     );
+//   }
+// }
+
+///////////////////////////////////////////////////
+///REVISED BY CHATGPT
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:tflite_flutter/tflite_flutter.dart';
+// import 'spam_page.dart';
+// import 'dart:typed_data';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'D-SpamPH',
+//       theme: ThemeData(
+//         primarySwatch: Colors.orange,
+//       ),
+//       home: HomePage(),
+//     );
+//   }
+// }
+
+// class HomePage extends StatefulWidget {
+//   const HomePage({Key? key}) : super(key: key);
+
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+
+// class _HomePageState extends State<HomePage> {
+//   final SmsQuery _query = SmsQuery();
+//   List<SmsMessage> _messages = [];
+//   List<SmsMessage> _spamMessages = [];
+//   late Interpreter _interpreter;
+//   String prediction = '';
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     loadModel();
+//   }
+
+//   Future<void> _handleMessageTap(SmsMessage message) async {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => SpamPage(message: message),
+//       ),
+//     );
+
+//     String newMessage = message.body ?? "";
+//     print('Message: $newMessage');
+//     String prediction = await predictMessage(newMessage);
+//     print('Prediction: $prediction');
+//   }
+
+//   Future<void> loadModel() async {
+//     try {
+//       final interpreterOptions = InterpreterOptions();
+//       _interpreter = await Interpreter.fromAsset(
+//         'assets/model_lstm_09.20.23.tflite',
+//         options: interpreterOptions,
+//       );
+//     } catch (e) {
+//       print('Failed to load the TFLite model: $e');
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('SMS Spam History'),
+//       ),
+//       body: Container(
+//         padding: const EdgeInsets.all(10.0),
+//         child: _spamMessages.isNotEmpty
+//             ? _MessagesListView(
+//                 messages: _spamMessages,
+//                 onMessageTap: _handleMessageTap,
+//               )
+//             : Center(
+//                 child: Text(
+//                   'No spam messages to show.',
+//                   style: Theme.of(context).textTheme.headline6,
+//                   textAlign: TextAlign.center,
+//                 ),
+//               ),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: _refreshMessages,
+//         child: const Icon(Icons.refresh),
+//       ),
+//     );
+//   }
+
+//   void _refreshMessages() async {
+//     var permission = await Permission.sms.status;
+//     if (permission.isGranted) {
+//       final messages = await _query.querySms(
+//         kinds: [SmsQueryKind.inbox],
+//       );
+
+//       // Detect spam messages
+//       final spamMessages = await detectSpamMessages(messages);
+
+//       setState(() {
+//         _messages = messages;
+//         _spamMessages = spamMessages;
+//       });
+//     } else {
+//       await Permission.sms.request();
+//     }
+//   }
+
+//   Future<List<SmsMessage>> _fetchThreadMessages(SmsMessage message) async {
+//     if (message.threadId != null) {
+//       List<SmsMessage> threadMessages = await _query.querySms(
+//         threadId: message.threadId,
+//         kinds: [SmsQueryKind.inbox],
+//       );
+//       return threadMessages;
+//     }
+//     return [];
+//   }
+
+//   Future<List<SmsMessage>> detectSpamMessages(List<SmsMessage> messages) async {
+//     List<SmsMessage> spamMessages = [];
+
+//     for (var message in messages) {
+//       String prediction = await predictMessage(message.body ?? '');
+//       if (prediction == 'Spam') {
+//         spamMessages.add(message);
+//       }
+//     }
+
+//     return spamMessages;
+//   }
+
+//   Future<String> predictMessage(String message) async {
+//     if (!_isModelLoaded()) {
+//       throw Exception('TFLite model is not loaded.');
+//     }
+
+//     try {
+//       final input = preprocessMessage(message);
+//       final output = List<double>.filled(2, 0.0);
+//       final inputList = [input];
+//       final outputList = [output];
+
+//       final convertedInputList = inputList
+//           .map((list) => list.map((value) => value.toDouble()).toList())
+//           .toList();
+
+//       final inputBuffer = convertedInputList.expand((x) => x).toList();
+//       final outputBuffer = outputList.expand((x) => x).toList();
+
+//       _interpreter.run(inputBuffer, outputBuffer);
+
+//       final prediction = outputBuffer[0] > outputBuffer[1] ? 'Ham' : 'Spam';
+//       return prediction;
+//     } catch (e) {
+//       print('Failed to make a prediction: $e');
+//     }
+//     return 'Unknown';
+//   }
+
+//   bool _isModelLoaded() {
+//     return _interpreter != null;
+//   }
+
+//   String cleanMessage(String message) {
+//     final cleanedText = message.replaceAll(RegExp('[^A-Za-z]'), ' ');
+//     return cleanedText.toLowerCase();
+//   }
+
+//   List<int> encodeMessage(String message) {
+//     final encodedMessage = message.codeUnits;
+//     return encodedMessage;
+//   }
+
+//   Uint8List padSequence(List<int> sequence, {int maxlen = 80}) {
+//     final paddedSequence = List<int>.filled(maxlen, 0);
+//     final sequenceLength = sequence.length;
+//     final truncatedSequence =
+//         sequenceLength <= maxlen ? sequence : sequence.sublist(0, maxlen);
+//     paddedSequence.setRange(0, truncatedSequence.length, truncatedSequence);
+//     return Uint8List.fromList(paddedSequence);
+//   }
+
+//   Uint8List preprocessMessage(String message) {
+//     final cleanedMessage = cleanMessage(message);
+//     final encodedMessage = encodeMessage(cleanedMessage);
+//     final paddedMessage = padSequence(encodedMessage, maxlen: 80);
+//     return paddedMessage;
+//   }
+// }
+
+// class _MessagesListView extends StatelessWidget {
+//   const _MessagesListView({
+//     Key? key,
+//     required this.messages,
+//     required this.onMessageTap,
+//   }) : super(key: key);
+
+//   final List<SmsMessage> messages;
+//   final Function(SmsMessage) onMessageTap;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Map<String, List<SmsMessage>> groupedMessages = {};
+//     for (var message in messages) {
+//       String sender = message.sender!;
+//       if (groupedMessages.containsKey(sender)) {
+//         groupedMessages[sender]!.add(message);
+//       } else {
+//         groupedMessages[sender] = [message];
+//       }
+//     }
+
+//     return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: groupedMessages.length,
+//       itemBuilder: (BuildContext context, int i) {
+//         String contactNumber = groupedMessages.keys.elementAt(i);
+//         List<SmsMessage> contactMessages = groupedMessages[contactNumber]!;
+//         SmsMessage latestMessage = contactMessages.first;
+//         String messageBody = latestMessage.body ?? '';
+
+//         return ListTile(
+//           title: Text(contactNumber),
+//           subtitle: Text(
+//             messageBody.split('\n').first,
+//             maxLines: 1,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//           onTap: () => onMessageTap(latestMessage),
+//         );
+//       },
+//     );
+//   }
+// }
+///////////////////////////////////////////////////
+///STRING FILTER
+
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tflite_flutter/tflite_flutter.dart'; // Add TFLite import
 import 'spam_page.dart';
-import 'dart:typed_data';
+import 'app_drawer.dart'; // Import the AppDrawer file
 
 void main() => runApp(MyApp());
 
@@ -1359,65 +1856,43 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final SmsQuery _query = SmsQuery();
-  List<SmsMessage> _messages = [];
-  late Interpreter _interpreter; // Define the interpreter
-  String prediction = '';
+  List<SmsMessage> _spamMessages = [];
 
   @override
   void initState() {
     super.initState();
-    loadModel();
+    _refreshMessages(); // Call _refreshMessages to load data when the app starts.
   }
 
   Future<void> _handleMessageTap(SmsMessage message) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SpamPage(message: message),
-      ),
-    );
-  }
-
-  Future<void> loadModel() async {
-    try {
-      final interpreterOptions = InterpreterOptions();
-      _interpreter = await Interpreter.fromAsset(
-        'assets/model_lstm_09.20.23.tflite',
-        options: interpreterOptions,
+    String newMessage = message.body ?? "";
+    if (_isSpam(newMessage)) {
+      // Redirect to SpamPage for spam messages.
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SpamPage(message: message),
+        ),
       );
-    } catch (e) {
-      print('Failed to load the TFLite model: $e');
+    } else {
+      // Handle non-spam messages here.
+      print('Non-Spam Message: $newMessage');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Wrap your HomePage in a Scaffold
       appBar: AppBar(
         title: const Text('SMS Spam History'),
       ),
       body: Container(
         padding: const EdgeInsets.all(10.0),
-        child: _messages.isNotEmpty
+        child: _spamMessages.isNotEmpty
             ? _MessagesListView(
-                messages: _messages,
-                onMessageTap: (_handleMessageTap) {
-                  _fetchThreadMessages(_handleMessageTap)
-                      .then((threadMessages) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SpamPage(
-                          message: _handleMessageTap,
-                          // threadMessages: threadMessages,
-                        ),
-                      ),
-                    );
-                  });
-                  String newMessage = _handleMessageTap.body ?? "";
-                  print(_handleMessageTap.body);
-                  print(predictMessage(newMessage));
-                },
+                messages: _spamMessages,
+                onMessageTap: _handleMessageTap,
               )
             : Center(
                 child: Text(
@@ -1428,106 +1903,58 @@ class _HomePageState extends State<HomePage> {
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var permission = await Permission.sms.status;
-          if (permission.isGranted) {
-            final messages = await _query.querySms(
-              kinds: [SmsQueryKind.inbox],
-            );
-            setState(() {
-              _messages = messages;
-              // print(_query.querySms);
-            });
-          } else {
-            await Permission.sms.request();
-          }
-        },
+        onPressed: _refreshMessages,
         child: const Icon(Icons.refresh),
       ),
+      drawer: AppDrawer(context), // Include the AppDrawer as the drawer
     );
   }
 
-  Future<List<SmsMessage>> _fetchThreadMessages(SmsMessage message) async {
-    if (message.threadId != null) {
-      List<SmsMessage> threadMessages = await _query.querySms(
-        threadId: message.threadId,
+  void _refreshMessages() async {
+    var permission = await Permission.sms.status;
+    if (permission.isGranted) {
+      final messages = await _query.querySms(
         kinds: [SmsQueryKind.inbox],
       );
-      // print(threadMessages);
-      return threadMessages;
+
+      // Filter spam messages
+      final spamMessages =
+          messages.where((message) => _isSpam(message.body ?? '')).toList();
+
+      setState(() {
+        _spamMessages = spamMessages;
+      });
+    } else {
+      await Permission.sms.request();
     }
-    return [];
   }
 
-  Future<List<SmsMessage>> detectSpamMessages(List<SmsMessage> messages) async {
-    List<SmsMessage> spamMessages = [];
+  bool _isSpam(String message) {
+    final spamKeywords = [
+      "free",
+      "call",
+      "register",
+      "claim",
+      "sign",
+      "join",
+      "jackpotcity",
+      "sbet",
+      "deposit",
+      "bonus",
+      "free money",
+      "prize",
+      "winning",
+      "chance",
+      "win",
+      "https",
+    ];
 
-    for (var message in messages) {
-      String prediction = await predictMessage(message.body ?? '');
-      if (prediction == 'Spam') {
-        spamMessages.add(message);
+    for (var keyword in spamKeywords) {
+      if (message.toLowerCase().contains(keyword)) {
+        return true;
       }
     }
-
-    return spamMessages;
-  }
-
-  Future<String> predictMessage(String message) async {
-    if (!_isModelLoaded()) {
-      throw Exception('TFLite model is not loaded.');
-    }
-
-    try {
-      final input = preprocessMessage(message);
-      final output = List<double>.filled(2, 0.0); // Output shape (None, 2)
-      final inputList = [input]; // Input shape (None, 80)
-      final outputList = [output];
-
-      final convertedInputList = inputList
-          .map((list) => list.map((value) => value.toDouble()).toList())
-          .toList();
-
-      final inputBuffer = convertedInputList.expand((x) => x).toList();
-      final outputBuffer = outputList.expand((x) => x).toList();
-
-      _interpreter.run(inputBuffer, outputBuffer);
-
-      final prediction = outputBuffer[0] > outputBuffer[1] ? 'Ham' : 'Spam';
-      return prediction;
-    } catch (e) {
-      print('Failed to make a prediction: $e');
-    }
-    return 'Unknown';
-  }
-
-  bool _isModelLoaded() {
-    return _interpreter != null;
-  }
-
-  String cleanMessage(String message) {
-    final cleanedText = message.replaceAll(RegExp('[^A-Za-z]'), ' ');
-    return cleanedText.toLowerCase();
-  }
-
-  List<int> encodeMessage(String message) {
-    final encodedMessage = message.codeUnits;
-    return encodedMessage;
-  }
-
-  Uint8List padSequence(List<int> sequence, {int maxlen = 80}) {
-    final paddedSequence = List<int>.filled(maxlen, 0);
-    final sequenceLength = sequence.length;
-    final truncatedSequence =
-        sequenceLength <= maxlen ? sequence : sequence.sublist(0, maxlen);
-    paddedSequence.setRange(0, truncatedSequence.length, truncatedSequence);
-    return Uint8List.fromList(paddedSequence);
-  }
-
-  Uint8List preprocessMessage(String message) {
-    final cleanedMessage = cleanMessage(message);
-    final encodedMessage = encodeMessage(cleanedMessage);
-    final paddedMessage = padSequence(encodedMessage, maxlen: 80);
-    return paddedMessage;
+    return false;
   }
 }
 
@@ -1539,13 +1966,15 @@ class _MessagesListView extends StatelessWidget {
   }) : super(key: key);
 
   final List<SmsMessage> messages;
-  final Function(SmsMessage) onMessageTap; // Callback function
+  final Function(SmsMessage) onMessageTap;
 
   @override
   Widget build(BuildContext context) {
-    Map<String, List<SmsMessage>> groupedMessages = {};
+    Map<String, List<SmsMessage>> groupedMessages = {}; // Corrected: Use a Map
+
     for (var message in messages) {
-      String sender = message.sender!;
+      String sender = message.address ??
+          'Unknown Sender'; // Use message.address to get the sender's phone number
       if (groupedMessages.containsKey(sender)) {
         groupedMessages[sender]!.add(message);
       } else {
@@ -1560,111 +1989,17 @@ class _MessagesListView extends StatelessWidget {
         String contactNumber = groupedMessages.keys.elementAt(i);
         List<SmsMessage> contactMessages = groupedMessages[contactNumber]!;
 
-        SmsMessage latestMessage = contactMessages.first;
-
-        String messageBody = latestMessage.body ?? '';
-
+        // Display contact messages as you prefer
         return ListTile(
           title: Text(contactNumber),
           subtitle: Text(
-            messageBody.split('\n').first,
+            contactMessages.first.body ?? 'No message body',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          onTap: () =>
-              onMessageTap(latestMessage), // Trigger the callback function
+          onTap: () => onMessageTap(contactMessages.first),
         );
       },
     );
   }
 }
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:tflite/tflite.dart';
-// import 'dart:typed_data'; // Import for Uint8List
-
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatefulWidget {
-//   @override
-//   _MyAppState createState() => _MyAppState();
-// }
-
-// class _MyAppState extends State<MyApp> {
-//   String? res; // Store the result of loading the model and labels
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadModelAndLabels();
-//   }
-
-//   loadModelAndLabels() async {
-//     res = await Tflite.loadModel(
-//       model:
-//           'assets/model_lstm_09.20.23.tflite', // Replace with your model path
-//       labels: 'assets/labels.txt', // Replace with your labels path
-//       numThreads: 1, // defaults to 1
-//       isAsset:
-//           true, // defaults to true, set to false to load resources outside assets
-//       useGpuDelegate:
-//           false, // defaults to false, set to true to use GPU delegate
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     Tflite.close();
-//     super.dispose();
-//   }
-
-//   // Run inference with your input data
-//   Future<void> runInference() async {
-//     // Check if the model and labels have been successfully loaded
-//     if (res == null) {
-//       print('Model and labels have not been loaded yet.');
-//       return;
-//     }
-
-//     // Replace this with your input data
-//     List<List<double>> inputData = [
-//       [0.1, 0.2, 0.3],
-//       [0.4, 0.5, 0.6],
-//     ];
-
-//     // Convert the inputData to Uint8List
-//     Uint8List inputUint8List = Uint8List.fromList(
-//       inputData
-//           .expand((e) => e.map((e) => (e * 255).toInt()).toList())
-//           .toList(),
-//     );
-
-//     final List<dynamic>? output = await Tflite.runModelOnBinary(
-//       binary: inputUint8List,
-//     );
-
-//     // Handle the model output
-//     print(output);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: Text('LSTM with Flutter'),
-//         ),
-//         body: Center(
-//           child: ElevatedButton(
-//             onPressed: runInference,
-//             child: Text('Run Inference'),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
