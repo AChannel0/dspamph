@@ -105,7 +105,7 @@
 import 'dart:async';
 // import 'package:dspamph/views/userside/homepage.dart';
 import 'package:flutter/material.dart';
-import 'package:dspamph/selection_page.dart'; // Import the next screen you want to navigate to
+import 'package:dspamph/login_page.dart'; // Import the next screen you want to navigate to
 
 class LoadingScreen extends StatefulWidget {
   @override

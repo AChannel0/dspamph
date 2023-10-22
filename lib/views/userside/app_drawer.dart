@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:dspamph/selection_page.dart';
-import 'package:dspamph/views/userside/view_spam_analytics.dart';
+import 'package:dspamph/login_page.dart';
+// import 'package:dspamph/views/userside/view_spam_analytics.dart';
 
 class AppDrawer extends StatelessWidget {
   final BuildContext context;
+  final Map<String, int> spamMessageCountByDate; // Add this line
 
-  const AppDrawer(this.context, {super.key});
-
+  const AppDrawer(this.context,
+      {required this.spamMessageCountByDate}); // Update the constructor
   void logout() {
     // Implement your logout logic here
     Navigator.pushReplacement(
@@ -31,17 +32,6 @@ class AppDrawer extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('View Spam Analytics'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ViewSpamAnalytics()),
-              );
-            },
           ),
           ListTile(
             leading: const Icon(Icons.person),
