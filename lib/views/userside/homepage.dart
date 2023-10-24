@@ -2448,6 +2448,425 @@
 
 //////////////////////////////////
 ///WITH CALENDAR, FURTHER OPTIMIZED
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'spam_page.dart';
+// import 'app_drawer.dart';
+// import 'dart:async';
+// import 'package:table_calendar/table_calendar.dart';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'D-SpamPH',
+//       theme: ThemeData(
+//         primarySwatch: Colors.orange,
+//       ),
+//       home: HomePage(),
+//     );
+//   }
+// }
+
+// class _MessagesListView extends StatelessWidget {
+//   const _MessagesListView({
+//     Key? key,
+//     required this.messages,
+//     required this.onMessageTap,
+//   }) : super(key: key);
+
+//   final List<SmsMessage> messages;
+//   final Function(SmsMessage) onMessageTap;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Map<String, List<SmsMessage>?> groupedMessages = {};
+
+//     for (var message in messages) {
+//       String sender = message.address ?? 'Unknown Sender';
+//       if (groupedMessages.containsKey(sender)) {
+//         groupedMessages[sender]!.add(message);
+//       } else {
+//         groupedMessages[sender] = [message];
+//       }
+//     }
+
+//     return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: groupedMessages.length,
+//       itemBuilder: (BuildContext context, int i) {
+//         String contactNumber = groupedMessages.keys.elementAt(i);
+//         List<SmsMessage> contactMessages = groupedMessages[contactNumber]!;
+
+//         return ListTile(
+//           title: Text(contactNumber),
+//           subtitle: Text(
+//             contactMessages.first.body ?? 'No message body',
+//             maxLines: 1,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//           onTap: () => onMessageTap(contactMessages.first),
+//         );
+//       },
+//     );
+//   }
+// }
+
+// class CalendarNavigationBar extends StatelessWidget {
+//   final DateTime selectedDate;
+//   final Function(DateTime) onDateSelected;
+//   final Map<String, int> spamMessageCountByDate;
+//   final List<SmsMessage> spamMessages;
+
+//   CalendarNavigationBar({
+//     required this.selectedDate,
+//     required this.onDateSelected,
+//     required this.spamMessageCountByDate,
+//     required this.spamMessages,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final selectedDateKey = selectedDate.toString().split(' ')[0];
+//     final spamCount = spamMessageCountByDate[selectedDateKey] ?? 0;
+
+//     return Column(
+//       children: [
+//         Container(
+//           margin: EdgeInsets.only(bottom: 5),
+//           decoration: BoxDecoration(
+//             color: Colors.orange.shade50, // Orange shade 100 background
+//           ),
+//           child: TableCalendar(
+//             calendarFormat: CalendarFormat.month,
+//             focusedDay: selectedDate,
+//             firstDay: DateTime(2023),
+//             lastDay: DateTime(2024),
+//             selectedDayPredicate: (day) => isSameDay(selectedDate, day),
+//             onDaySelected: (selectedDay, focusedDay) {
+//               onDateSelected(selectedDay);
+//             },
+//             calendarBuilders: CalendarBuilders(
+//               todayBuilder: (context, date, _) {
+//                 // Check if the date is today
+//                 final isToday = isSameDay(DateTime.now(), date);
+//                 return Container(
+//                   alignment: Alignment.center,
+//                   decoration: BoxDecoration(
+//                     color: isToday
+//                         ? Colors.orange.shade300
+//                         : Colors.orange.shade300, // Light orange for today
+//                     shape: BoxShape.circle,
+//                   ),
+//                   child: Text(
+//                     date.day.toString(),
+//                     style: TextStyle(
+//                       color: isToday
+//                           ? Colors.white
+//                           : Colors.black, // White text for today
+//                     ),
+//                   ),
+//                 );
+//               },
+//               selectedBuilder: (context, date, _) => Container(
+//                 alignment: Alignment.center,
+//                 decoration: BoxDecoration(
+//                   color: Colors.orange,
+//                   shape: BoxShape.circle,
+//                 ),
+//                 child: Text(
+//                   date.day.toString(),
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//         Container(
+//           alignment: Alignment
+//               .center, // Align the content both vertically and horizontally
+//           child: Padding(
+//             padding: const EdgeInsets.all(10.0),
+//             child: RichText(
+//               text: TextSpan(
+//                 text: 'Spam count by selected date: ',
+//                 style: TextStyle(
+//                   fontSize: 18,
+//                   fontWeight:
+//                       FontWeight.normal, // Font weight for the label is normal
+//                   color: Colors.black, // Text color for the label
+//                 ),
+//                 children: <TextSpan>[
+//                   TextSpan(
+//                     text: '$spamCount',
+//                     style: TextStyle(
+//                       fontSize: 22, // Updated font size for $spamCount
+//                       fontWeight:
+//                           FontWeight.bold, // Font weight for $spamCount is bold
+//                       color: Colors.orange, // Text color for $spamCount
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           margin: EdgeInsets.zero, // Remove any margin
+//         ),
+//         Expanded(
+//           child: ListView.builder(
+//             itemCount: spamMessages.length,
+//             itemBuilder: (BuildContext context, int index) {
+//               return ListTile(
+//                 title: Text(spamMessages[index].address ?? 'Unknown Sender'),
+//                 subtitle: Text(
+//                   spamMessages[index].body ?? 'No message body',
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+// class HomePage extends StatefulWidget {
+//   const HomePage({Key? key}) : super(key: key);
+
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+
+// class _HomePageState extends State<HomePage> {
+//   final SmsQuery _query = SmsQuery();
+//   final StreamController<List<SmsMessage>> _spamMessagesStreamController =
+//       StreamController<List<SmsMessage>>();
+//   final Map<String, int> spamMessageCountByDate = {};
+//   List<SmsMessage> spamMessages = [];
+//   List<SmsMessage> _cachedMessages = []; // Data cache for filtered messages
+//   DateTime _selectedDate = DateTime.now();
+//   bool _showCalendar = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initSmsListener();
+//   }
+
+//   @override
+//   void dispose() {
+//     _spamMessagesStreamController.close();
+//     super.dispose();
+//   }
+
+//   void _initSmsListener() async {
+//     await Permission.sms.request();
+//     _refreshMessages(); // Initial load of messages
+//   }
+
+//   // Method to filter and show all spam messages regardless of the date
+//   List<SmsMessage> _filterMessagesAll(List<SmsMessage> messages) {
+//     return messages.where((message) {
+//       return _isSpam(message.body ?? '');
+//     }).toList();
+//   }
+
+//   // Method to filter spam messages based on the selected date
+//   void _filterMessagesByDate() {
+//     final selectedDateKey = _selectedDate.toString().split(' ')[0];
+
+//     final filteredMessages = _cachedMessages.where((message) {
+//       final messageDate = message.date;
+//       final messageDateKey = messageDate?.toLocal().toString().split(' ')[0];
+//       return messageDateKey == selectedDateKey && _isSpam(message.body ?? '');
+//     }).toList();
+
+//     spamMessages = filteredMessages;
+//     _updateSpamMessageCountByDate(spamMessages);
+//     _spamMessagesStreamController.sink.add(spamMessages);
+//   }
+
+//   // Method to update the spam message count by date
+//   void _updateSpamMessageCountByDate(List<SmsMessage> messages) {
+//     spamMessageCountByDate.clear();
+
+//     for (var message in messages) {
+//       final date = message.date?.toLocal().toString().split(' ')[0];
+//       if (date != null) {
+//         spamMessageCountByDate.update(date, (value) => value + 1,
+//             ifAbsent: () => 1);
+//       }
+//     }
+//   }
+
+//   Future<void> _refreshMessages() async {
+//     // Clear the cache only if a full refresh is needed
+//     if (!_showCalendar) {
+//       _cachedMessages.clear();
+//     }
+//     final messages = await _query.querySms(
+//       kinds: [SmsQueryKind.inbox],
+//     );
+
+//     if (_showCalendar) {
+//       if (_cachedMessages.isEmpty) {
+//         _cachedMessages = _filterMessagesAll(messages);
+//       }
+//       _filterMessagesByDate();
+//     } else {
+//       if (_cachedMessages.isEmpty) {
+//         spamMessages = _filterMessagesAll(messages);
+//       } else {
+//         spamMessages = _cachedMessages;
+//       }
+//       _updateSpamMessageCountByDate(spamMessages);
+//       _spamMessagesStreamController.sink.add(spamMessages);
+//     }
+//   }
+
+//   Future<void> _handleMessageTap(SmsMessage message) async {
+//     String newMessage = message.body ?? "";
+//     if (_isSpam(newMessage)) {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => SpamPage(
+//             message: message,
+//             spamMessageCountByDate: spamMessageCountByDate,
+//           ),
+//         ),
+//       ).then((_) {
+//         // After returning from the SpamPage, refresh the messages
+//         _refreshMessages();
+//       });
+//     } else {
+//       print('Non-Spam Message: $newMessage');
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('SMS Spam History'),
+//         actions: [
+//           IconButton(
+//             icon: Icon(Icons.refresh),
+//             onPressed: _refreshMessages, // Manual refresh button
+//           ),
+//         ],
+//       ),
+//       body: _showCalendar
+//           ? CalendarNavigationBar(
+//               selectedDate: _selectedDate,
+//               onDateSelected: (selectedDay) {
+//                 setState(() {
+//                   _selectedDate = selectedDay;
+//                 });
+//               },
+//               spamMessageCountByDate: spamMessageCountByDate,
+//               spamMessages: spamMessages,
+//             )
+//           : _buildSpamMessagesView(),
+//       drawer: AppDrawer(
+//         context,
+//         spamMessageCountByDate: spamMessageCountByDate,
+//       ),
+//       bottomNavigationBar: BottomNavigationBar(
+//         items: const <BottomNavigationBarItem>[
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.message),
+//             label: 'Spam Messages',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.calendar_today),
+//             label: 'Calendar',
+//           ),
+//         ],
+//         currentIndex: _showCalendar ? 1 : 0,
+//         onTap: (index) {
+//           setState(() {
+//             _showCalendar = index == 1;
+//           });
+//         },
+//       ),
+//     );
+//   }
+
+//   Widget _buildSpamMessagesView() {
+//     return Container(
+//       padding: const EdgeInsets.all(10.0),
+//       child: StreamBuilder<List<SmsMessage>>(
+//         stream: _spamMessagesStreamController
+//             .stream, // Set the stream property here
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             final spamMessages = snapshot.data as List<SmsMessage>;
+//             return spamMessages.isNotEmpty
+//                 ? _MessagesListView(
+//                     messages: spamMessages,
+//                     onMessageTap: _handleMessageTap,
+//                   )
+//                 : Center(
+//                     child: Text(
+//                       'No spam messages to show.',
+//                       style: Theme.of(context).textTheme.headline6,
+//                       textAlign: TextAlign.center,
+//                     ),
+//                   );
+//           } else {
+//             return Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+//         },
+//       ),
+//     );
+//   }
+
+//   bool _isSpam(String message) {
+//     final spamKeywords = [
+//       "free",
+//       "call",
+//       "register",
+//       "claim",
+//       "sign",
+//       "join",
+//       "jackpotcity",
+//       "sbet",
+//       "deposit",
+//       "bonus",
+//       "free money",
+//       "prize",
+//       "winning",
+//       "chance",
+//       "win",
+//       "https",
+//     ];
+
+//     for (var keyword in spamKeywords) {
+//       if (message.toLowerCase().contains(keyword)) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
+
+//   bool _isSameDate(DateTime? date1, DateTime date2) {
+//     return date1 != null &&
+//         date1.year == date2.year &&
+//         date1.month == date2.month &&
+//         date1.day == date2.day;
+//   }
+// }
+
+////////////////////////////////////////////////////////////
+///FIREBASE FIRESTORE
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -2455,10 +2874,22 @@ import 'spam_page.dart';
 import 'app_drawer.dart';
 import 'dart:async';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() => runApp(MyApp());
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(DSpamPhApp());
+// }
 
-class MyApp extends StatelessWidget {
+void main() {
+  runApp(DSpamPhApp());
+}
+
+class DSpamPhApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -2651,6 +3082,41 @@ class _HomePageState extends State<HomePage> {
   List<SmsMessage> _cachedMessages = []; // Data cache for filtered messages
   DateTime _selectedDate = DateTime.now();
   bool _showCalendar = false;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  void addSpamDataToFirestore() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+// Sign in with email and password
+    final UserCredential userCredential =
+        await _auth.signInWithEmailAndPassword(
+      email: "alladynica.alinsod@wvsu.edu.ph",
+      password: "Anawvsu123",
+    );
+
+// Check if user is authenticated
+    if (userCredential.user != null) {
+      // You can now write to Firestore.
+      final CollectionReference spamCollection =
+          firestore.collection('spam_reports');
+
+      for (var message in spamMessages) {
+        final spamData = {
+          'spam_sender_number': message.address ?? 'Unknown Sender',
+          'date_time_received': message.date?.toLocal() ?? DateTime.now(),
+          'spam_content': message.body ?? 'No message body',
+        };
+
+        // Add a new document with a unique ID
+        await spamCollection.add(spamData);
+
+        print('Spam data added to Firestore');
+      }
+    } else {
+      // Handle authentication failure.
+      print('Firebase authentication failue, allady email');
+    }
+  }
 
   @override
   void initState() {
@@ -2794,6 +3260,29 @@ class _HomePageState extends State<HomePage> {
             _showCalendar = index == 1;
           });
         },
+      ),
+      // Change the button to a rounded rectangle
+      floatingActionButton: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        child: ElevatedButton(
+          onPressed: () {
+            addSpamDataToFirestore(); // Call this function to report spam
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.warning),
+              Text('Report Spam'), // Add the text label here
+            ],
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.red, // Change the button color
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(20.0), // Adjust the border radius
+            ),
+          ),
+        ),
       ),
     );
   }
