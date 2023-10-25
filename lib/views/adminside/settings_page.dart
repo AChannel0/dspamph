@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dspamph/selection_page.dart';
+import 'package:dspamph/login_page.dart';
 
 class SettingsPage extends StatelessWidget {
   final BuildContext context;

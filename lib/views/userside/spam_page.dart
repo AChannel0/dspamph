@@ -366,125 +366,393 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// import 'spam_detection.dart';
+// import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
+
+// class SpamPage extends StatefulWidget {
+//   final SmsMessage message;
+//   final List<SmsMessage> threadMessages;
+
+//   const SpamPage({
+//     Key? key,
+//     required this.message,
+//     required this.threadMessages,
+//   }) : super(key: key);
+
+//   @override
+//   _SpamPageState createState() => _SpamPageState();
+// }
+
+// class _SpamPageState extends State<SpamPage> {
+//   bool _isNumberBlocked = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     loadModel();
+//   }
+
+//   loadModel() async {
+//     // Load your model here if required
+//     await tfl.Interpreter.fromAsset('assets/lstm_model.tflite');
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     List<SmsMessage> allMessages = [widget.message, ...widget.threadMessages];
+//     List<SmsMessage> uniqueMessages = _removeDuplicateMessages(allMessages);
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Spam Message'),
+//       ),
+//       body: Column(
+//         children: [
+//           Expanded(
+//             child: ListView.builder(
+//               itemCount: uniqueMessages.length,
+//               reverse: true,
+//               itemBuilder: (BuildContext context, int index) {
+//                 SmsMessage smsMessage = uniqueMessages[index];
+//                 return FutureBuilder<int>(
+//                   future: getSpamPrediction(smsMessage.body ?? ''),
+//                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+//                     if (snapshot.hasData && snapshot.data == 0) {
+//                       // Not spam, display the message tile
+//                       return _buildMessageTile(smsMessage);
+//                     } else {
+//                       // Spam, hide the message tile
+//                       return Container();
+//                     }
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//           if (!_isNumberBlocked)
+//             ElevatedButton(
+//               onPressed: () {
+//                 _blockNumber(widget.message.sender.toString());
+//               },
+//               child: const Text('Block Number'),
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   List<SmsMessage> _removeDuplicateMessages(List<SmsMessage> messages) {
+//     List<SmsMessage> uniqueMessages = [];
+//     Set<String> messageBodies = {};
+
+//     for (SmsMessage message in messages) {
+//       if (!messageBodies.contains(message.body)) {
+//         uniqueMessages.add(message);
+//         messageBodies.add(message.body.toString());
+//       }
+//     }
+
+//     return uniqueMessages;
+//   }
+
+//   Widget _buildMessageTile(SmsMessage smsMessage) {
+//     final isMe = smsMessage.sender == widget.message.sender;
+
+//     return Container(
+//       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+//       child: Padding(
+//         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//         child: Column(
+//           crossAxisAlignment:
+//               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//           children: [
+//             Container(
+//               padding: EdgeInsets.all(8),
+//               decoration: BoxDecoration(
+//                 color: isMe ? Colors.blue : Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(16),
+//               ),
+//               child: Text(
+//                 smsMessage.body ?? '',
+//                 style: TextStyle(
+//                   color: isMe ? Colors.white : Colors.black,
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 4),
+//             Text(
+//               smsMessage.sender ?? '',
+//               style: TextStyle(
+//                 fontWeight: FontWeight.bold,
+//                 color: Colors.grey[600],
+//               ),
+//             ),
+//             SizedBox(height: 2),
+//             Text(
+//               smsMessage.date.toString(),
+//               style: TextStyle(
+//                 fontSize: 12,
+//                 color: Colors.grey[600],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   void _blockNumber(String phoneNumber) {
+//     // Add your backend code here to block the given phoneNumber
+//     // For example, make an API request or update a database entry
+
+//     setState(() {
+//       _isNumberBlocked = true;
+//     });
+//   }
+// }
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// // import 'spam_detection.dart';
+
+// class SpamPage extends StatefulWidget {
+//   final SmsMessage message;
+//   final List<SmsMessage> threadMessages;
+
+//   const SpamPage({
+//     Key? key,
+//     required this.message,
+//     required this.threadMessages,
+//   }) : super(key: key);
+
+//   @override
+//   _SpamPageState createState() => _SpamPageState();
+// }
+
+// class _SpamPageState extends State<SpamPage> {
+//   bool _isNumberBlocked = false;
+//   // SpamDetection _spamDetection = SpamDetection();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     // _spamDetection.loadModel();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     print('Received Message: ${widget.message.body}');
+//     print(
+//         'Received Thread Messages: ${widget.threadMessages.map((msg) => msg.body).toList()}');
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Spam Message'),
+//       ),
+//       body: Column(
+//         children: [
+//           Expanded(
+//             child: ListView.builder(
+//               // itemCount: uniqueMessages.length,
+//               reverse: true,
+//               itemBuilder: (BuildContext context, int index) {
+//                 // SmsMessage smsMessage = uniqueMessages[index];
+//                 return FutureBuilder<String>(
+//                   // future: _spamDetection.predictMessage(smsMessage.body ?? ''),
+//                   builder:
+//                       (BuildContext context, AsyncSnapshot<String> snapshot) {
+//                     if (snapshot.hasData && snapshot.data == 'spam') {
+//                       // Spam message, display the message tile
+//                       // return _buildMessageTile(smsMessage);
+//                     } else {
+//                       // Not spam, hide the message tile
+//                       return Container();
+//                     }
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//           if (!_isNumberBlocked)
+//             ElevatedButton(
+//               onPressed: () {
+//                 _blockNumber(widget.message.sender.toString());
+//               },
+//               child: const Text('Block Number'),
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   List<SmsMessage> _removeDuplicateMessages(List<SmsMessage> messages) {
+//     List<SmsMessage> uniqueMessages = [];
+//     Set<String> messageBodies = {};
+
+//     for (SmsMessage message in messages) {
+//       if (!messageBodies.contains(message.body)) {
+//         uniqueMessages.add(message);
+//         messageBodies.add(message.body.toString());
+//       }
+//     }
+
+//     return uniqueMessages;
+//   }
+
+//   Widget _buildMessageTile(SmsMessage smsMessage) {
+//     final isMe = smsMessage.sender == widget.message.sender;
+
+//     return Container(
+//       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+//       child: Padding(
+//         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//         child: Column(
+//           crossAxisAlignment:
+//               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//           children: [
+//             Container(
+//               padding: EdgeInsets.all(8),
+//               decoration: BoxDecoration(
+//                 color: isMe ? Colors.blue : Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(16),
+//               ),
+//               child: Text(
+//                 smsMessage.body ?? '',
+//                 style: TextStyle(
+//                   color: isMe ? Colors.white : Colors.black,
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 4),
+//             Text(
+//               smsMessage.sender ?? '',
+//               style: TextStyle(
+//                 fontWeight: FontWeight.bold,
+//                 color: Colors.grey[600],
+//               ),
+//             ),
+//             SizedBox(height: 2),
+//             Text(
+//               smsMessage.date.toString(),
+//               style: TextStyle(
+//                 fontSize: 12,
+//                 color: Colors.grey[600],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   void _blockNumber(String phoneNumber) {
+//     // Add your backend code here to block the given phoneNumber
+//     // For example, make an API request or update a database entry
+
+//     setState(() {
+//       _isNumberBlocked = true;
+//     });
+//   }
+// }
+
+///////////////////////////////////////////////////////////////
+///FROM SIR LOUIE
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+// // import 'package:tflite/tflite.dart';
+// import 'package:tflite_flutter/tflite_flutter.dart';
+
+// class SpamPage extends StatelessWidget {
+//   final SmsMessage message;
+
+//   SpamPage({required this.message});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Message Details'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               'Sender: ${message.sender ?? 'Unknown'}',
+//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//             ),
+//             SizedBox(height: 8),
+//             Text(
+//               'Date and Time: ${message.date ?? 'Unknown'}',
+//               style: TextStyle(fontSize: 16),
+//             ),
+//             SizedBox(height: 16),
+//             Text(
+//               'Message Content:',
+//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//             ),
+//             SizedBox(height: 8),
+//             Text(
+//               '${message.body ?? 'No message content'}',
+//               style: TextStyle(fontSize: 16),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+/////////////////////////////////////////////////////
+///REVISED BY CHATGPT
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
-class SpamPage extends StatefulWidget {
+class SpamPage extends StatelessWidget {
   final SmsMessage message;
-  final List<SmsMessage> threadMessages;
 
-  const SpamPage({
-    Key? key,
-    required this.message,
-    required this.threadMessages,
-  }) : super(key: key);
+  final Map<String, int> spamMessageCountByDate;
 
-  @override
-  _SpamPageState createState() => _SpamPageState();
-}
-
-class _SpamPageState extends State<SpamPage> {
-  bool _isNumberBlocked = false;
+  SpamPage(
+      {Key? key, required this.message, required this.spamMessageCountByDate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<SmsMessage> allMessages = [widget.message, ...widget.threadMessages];
-    List<SmsMessage> uniqueMessages = _removeDuplicateMessages(allMessages);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Spam Message'),
+        title: Text('Message Details'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: uniqueMessages.length,
-              reverse: true,
-              itemBuilder: (BuildContext context, int index) {
-                SmsMessage smsMessage = uniqueMessages[index];
-                return _buildMessageTile(smsMessage);
-              },
-            ),
-          ),
-          if (!_isNumberBlocked)
-            ElevatedButton(
-              onPressed: () {
-                _blockNumber(widget.message.sender.toString());
-              },
-              child: const Text('Block Number'),
-            ),
-        ],
-      ),
-    );
-  }
-
-  List<SmsMessage> _removeDuplicateMessages(List<SmsMessage> messages) {
-    List<SmsMessage> uniqueMessages = [];
-    Set<String> messageBodies = {};
-
-    for (SmsMessage message in messages) {
-      if (!messageBodies.contains(message.body)) {
-        uniqueMessages.add(message);
-        messageBodies.add(message.body.toString());
-      }
-    }
-
-    return uniqueMessages;
-  }
-
-  Widget _buildMessageTile(SmsMessage smsMessage) {
-    final isMe = smsMessage.sender == widget.message.sender;
-
-    return Container(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment:
-              isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isMe ? Colors.blue : Colors.grey[300],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                smsMessage.body ?? '',
-                style: TextStyle(
-                  color: isMe ? Colors.white : Colors.black,
-                ),
-              ),
-            ),
-            SizedBox(height: 4),
             Text(
-              smsMessage.sender ?? '',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[600],
-              ),
+              'Sender: ${message.sender ?? 'Unknown'}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 8),
             Text(
-              smsMessage.date.toString(),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+              'Date and Time: ${message.date ?? 'Unknown'}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Message Content:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              '${message.body ?? 'No message content'}',
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void _blockNumber(String phoneNumber) {
-    // Add your backend code here to block the given phoneNumber
-    // For example, make an API request or update a database entry
-
-    setState(() {
-      _isNumberBlocked = true;
-    });
   }
 }
