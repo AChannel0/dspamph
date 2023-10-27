@@ -3598,6 +3598,7 @@ class _HomePageState extends State<HomePage> {
   DateTime _selectedDate = DateTime.now();
   bool _showCalendar = false;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<String> uploadedSpamData = [];
 
   void addSpamDataToFirestore() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -3624,30 +3625,37 @@ class _HomePageState extends State<HomePage> {
       String nextSpamDataID = 'spamData ${spamDataCount + 1}';
 
       for (var message in spamMessages) {
-        final spamData = {
-          'spam_sender_number': message.address ?? 'Unknown Sender',
-          'date_time_received': message.date?.toLocal() ?? DateTime.now(),
-          'spam_content': message.body ?? 'No message body',
-        };
-        print(message.address ?? 'Unknown Sender');
-        print(message.date?.toLocal() ?? DateTime.now());
-        print(message.body ?? 'No message body');
+        final spamContent = message.body ?? 'No message body';
+        if (!uploadedSpamData.contains(spamContent)) {
+          final spamData = {
+            'spam_sender_number': message.address ?? 'Unknown Sender',
+            'date_time_received': message.date?.toLocal() ?? DateTime.now(),
+            'spam_content': spamContent,
+          };
+          print(message.address ?? 'Unknown Sender');
+          print(message.date?.toLocal() ?? DateTime.now());
+          print(spamContent);
 
-        // Add a new document with the custom trackable ID
-        await spamCollection.doc(nextSpamDataID).set(spamData);
+          // Add a new document with the custom trackable ID
+          await spamCollection.doc(nextSpamDataID).set(spamData);
 
-        print('Spam data added to Firestore with ID: $nextSpamDataID');
+          print('Spam data added to Firestore with ID: $nextSpamDataID');
 
-        // Increment the spam data count and update it in Firestore
-        spamDataCount++;
-        await spamCollection.doc('spamDataCount').set({'count': spamDataCount});
+          // Increment the spam data count and update it in Firestore
+          spamDataCount++;
+          await spamCollection
+              .doc('spamDataCount')
+              .set({'count': spamDataCount});
 
-        // Update nextSpamDataID for the next iteration
-        nextSpamDataID = 'spamData ${spamDataCount + 1}';
+          // Update nextSpamDataID for the next iteration
+          nextSpamDataID = 'spamData ${spamDataCount + 1}';
+
+          // Add the uploaded spam content to the list
+          uploadedSpamData.add(spamContent);
+        } else {
+          print('Spam data already uploaded: $spamContent');
+        }
       }
-    } else {
-      // Handle authentication failure.
-      print('Firebase authentication failed, allady email');
     }
   }
 
