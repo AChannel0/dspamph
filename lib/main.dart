@@ -90,7 +90,7 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeNotifier(),
-      child: DSpamPhApp(), // Replace with your main app widget
+      child: const DSpamPhApp(), // Replace with your main app widget
     ),
   );
 }
