@@ -3400,14 +3400,6 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(DSpamPhApp());
-// }
-
 void main() {
   runApp(DSpamPhApp());
 }
@@ -3610,18 +3602,26 @@ class _HomePageState extends State<HomePage> {
   void addSpamDataToFirestore() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
-// Sign in with email and password
+    // Sign in with email and password
     final UserCredential userCredential =
         await _auth.signInWithEmailAndPassword(
       email: "alladynica.alinsod@wvsu.edu.ph",
       password: "Anawvsu123",
     );
 
-// Check if user is authenticated
+    // Check if the user is authenticated
     if (userCredential.user != null) {
       // You can now write to Firestore.
       final CollectionReference spamCollection =
           firestore.collection('spam_reports');
+
+      // Retrieve the current spam data count from Firestore
+      int spamDataCount = ((await spamCollection.doc('spamDataCount').get())
+              .data() as Map<String, dynamic>?)?['count'] as int? ??
+          0;
+
+      // Create the next spamData ID based on the retrieved count
+      String nextSpamDataID = 'spamData ${spamDataCount + 1}';
 
       for (var message in spamMessages) {
         final spamData = {
@@ -3633,10 +3633,17 @@ class _HomePageState extends State<HomePage> {
         print(message.date?.toLocal() ?? DateTime.now());
         print(message.body ?? 'No message body');
 
-        // Add a new document with a unique ID
-        await spamCollection.add(spamData);
+        // Add a new document with the custom trackable ID
+        await spamCollection.doc(nextSpamDataID).set(spamData);
 
-        print('Spam data added to Firestore');
+        print('Spam data added to Firestore with ID: $nextSpamDataID');
+
+        // Increment the spam data count and update it in Firestore
+        spamDataCount++;
+        await spamCollection.doc('spamDataCount').set({'count': spamDataCount});
+
+        // Update nextSpamDataID for the next iteration
+        nextSpamDataID = 'spamData ${spamDataCount + 1}';
       }
     } else {
       // Handle authentication failure.
