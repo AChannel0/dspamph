@@ -3399,6 +3399,7 @@ import 'dart:async';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(DSpamPhApp());
@@ -3600,6 +3601,10 @@ class _HomePageState extends State<HomePage> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<String> uploadedSpamData = [];
 
+  bool _isSpamDataUploaded(String spamContent) {
+    return uploadedSpamData.contains(spamContent);
+  }
+
   void addSpamDataToFirestore() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -3626,7 +3631,7 @@ class _HomePageState extends State<HomePage> {
 
       for (var message in spamMessages) {
         final spamContent = message.body ?? 'No message body';
-        if (!uploadedSpamData.contains(spamContent)) {
+        if (!_isSpamDataUploaded(spamContent)) {
           final spamData = {
             'spam_sender_number': message.address ?? 'Unknown Sender',
             'date_time_received': message.date?.toLocal() ?? DateTime.now(),
@@ -3650,8 +3655,9 @@ class _HomePageState extends State<HomePage> {
           // Update nextSpamDataID for the next iteration
           nextSpamDataID = 'spamData ${spamDataCount + 1}';
 
-          // Add the uploaded spam content to the list
+          // Add the uploaded spam content to the list and update SharedPreferences
           uploadedSpamData.add(spamContent);
+          _updateSharedPreferences();
         } else {
           print('Spam data already uploaded: $spamContent');
         }
@@ -3659,10 +3665,25 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  late SharedPreferences _prefs;
+
   @override
   void initState() {
     super.initState();
+    _initSharedPreferences();
     _initSmsListener();
+
+    // Automatically report spam when the HomePage is opened or refreshed
+    addSpamDataToFirestore();
+  }
+
+  void _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    uploadedSpamData = _prefs.getStringList('uploadedSpamData') ?? [];
+  }
+
+  void _updateSharedPreferences() {
+    _prefs.setStringList('uploadedSpamData', uploadedSpamData);
   }
 
   @override
@@ -3716,6 +3737,7 @@ class _HomePageState extends State<HomePage> {
     if (!_showCalendar) {
       _cachedMessages.clear();
     }
+
     final messages = await _query.querySms(
       kinds: [SmsQueryKind.inbox],
     );
@@ -3727,7 +3749,11 @@ class _HomePageState extends State<HomePage> {
       _filterMessagesByDate();
     } else {
       if (_cachedMessages.isEmpty) {
-        spamMessages = _filterMessagesAll(messages);
+        // Filter messages based on the sender's address starting with "+639"
+        spamMessages = _filterMessagesAll(messages
+            .where((message) =>
+                message.address != null && message.address!.startsWith("+639"))
+            .toList());
       } else {
         spamMessages = _cachedMessages;
       }
@@ -3801,29 +3827,6 @@ class _HomePageState extends State<HomePage> {
             _showCalendar = index == 1;
           });
         },
-      ),
-      // Change the button to a rounded rectangle
-      floatingActionButton: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: ElevatedButton(
-          onPressed: () {
-            addSpamDataToFirestore(); // Call this function to report spam
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.warning),
-              Text('Report Spam'), // Add the text label here
-            ],
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.red, // Change the button color
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(20.0), // Adjust the border radius
-            ),
-          ),
-        ),
       ),
     );
   }
