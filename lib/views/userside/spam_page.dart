@@ -713,11 +713,14 @@ import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
 class SpamPage extends StatelessWidget {
   final SmsMessage message;
-
   final Map<String, int> spamMessageCountByDate;
+  final List<String> uploadedSpamData; // Add this line
 
   SpamPage(
-      {Key? key, required this.message, required this.spamMessageCountByDate})
+      {Key? key,
+      required this.message,
+      required this.spamMessageCountByDate,
+      required this.uploadedSpamData})
       : super(key: key);
 
   @override

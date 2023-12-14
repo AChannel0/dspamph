@@ -3400,6 +3400,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dspamph/views/userside/spam_reports_history.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(DSpamPhApp());
@@ -3600,6 +3602,8 @@ class _HomePageState extends State<HomePage> {
   bool _showCalendar = false;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<String> uploadedSpamData = [];
+  List<String> uploadedTime = [];
+  List<String> uploadedSender = [];
 
   bool _isSpamDataUploaded(String spamContent) {
     return uploadedSpamData.contains(spamContent);
@@ -3631,20 +3635,32 @@ class _HomePageState extends State<HomePage> {
 
       for (var message in spamMessages) {
         final spamContent = message.body ?? 'No message body';
+        final spamSender = message.address ?? 'Unknown Sender';
+        final timestamp =
+            DateTime.now().toLocal(); // Add timestamp for uploaded time
+        // final uploadedSender = message.address;
         if (!_isSpamDataUploaded(spamContent)) {
           final spamData = {
             'spam_sender_number': message.address ?? 'Unknown Sender',
             'date_time_received': message.date?.toLocal() ?? DateTime.now(),
             'spam_content': spamContent,
           };
+
           print(message.address ?? 'Unknown Sender');
           print(message.date?.toLocal() ?? DateTime.now());
           print(spamContent);
+
+          print('spamSender:');
+          print(spamSender);
+
+          print('Date and Time Reported');
+          print(timestamp);
 
           // Add a new document with the custom trackable ID
           await spamCollection.doc(nextSpamDataID).set(spamData);
 
           print('Spam data added to Firestore with ID: $nextSpamDataID');
+          print('-----------------------------------------------------');
 
           // Increment the spam data count and update it in Firestore
           spamDataCount++;
@@ -3657,6 +3673,9 @@ class _HomePageState extends State<HomePage> {
 
           // Add the uploaded spam content to the list and update SharedPreferences
           uploadedSpamData.add(spamContent);
+          uploadedSender.add(spamSender);
+          // Add the uploaded time to the list and update SharedPreferences
+          uploadedTime.add(timestamp.toString());
           _updateSharedPreferences();
         } else {
           print('Spam data already uploaded: $spamContent');
@@ -3671,19 +3690,25 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _initSharedPreferences();
-    _initSmsListener();
 
     // Automatically report spam when the HomePage is opened or refreshed
-    addSpamDataToFirestore();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initSmsListener();
+      addSpamDataToFirestore();
+    });
   }
 
   void _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
     uploadedSpamData = _prefs.getStringList('uploadedSpamData') ?? [];
+    uploadedTime = _prefs.getStringList('uploadedTime') ?? [];
+    uploadedSender = _prefs.getStringList('uploadedSender') ?? [];
   }
 
   void _updateSharedPreferences() {
     _prefs.setStringList('uploadedSpamData', uploadedSpamData);
+    _prefs.setStringList('uploadedTime', uploadedTime);
+    _prefs.setStringList('uploadedSender', uploadedSender);
   }
 
   @override
@@ -3771,6 +3796,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => SpamPage(
             message: message,
             spamMessageCountByDate: spamMessageCountByDate,
+            uploadedSpamData: uploadedSpamData, // Add this line
           ),
         ),
       ).then((_) {
@@ -3782,6 +3808,19 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _navigateToSpamReportsHistoryPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SpamReportsHistoryPage(
+          uploadedSpamData: uploadedSpamData,
+          uploadedTime: uploadedTime,
+          uploadedSender: uploadedSender,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -3790,7 +3829,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: _refreshMessages, // Manual refresh button
+            onPressed: _refreshMessages,
+          ),
+          IconButton(
+            icon: Icon(Icons.history),
+            onPressed: _navigateToSpamReportsHistoryPage,
           ),
         ],
       ),
@@ -3809,6 +3852,9 @@ class _HomePageState extends State<HomePage> {
       drawer: AppDrawer(
         context,
         spamMessageCountByDate: spamMessageCountByDate,
+        uploadedSpamData: uploadedSpamData,
+        uploadedTime: uploadedTime,
+        uploadedSender: uploadedSender,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

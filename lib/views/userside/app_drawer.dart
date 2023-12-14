@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:dspamph/views/userside/login_page.dart';
 import 'package:dspamph/views/userside/preferences.dart'; // Import the preferences page
+import 'package:dspamph/views/userside/spam_reports_history.dart';
 
 class AppDrawer extends StatelessWidget {
   final BuildContext context;
   final Map<String, int> spamMessageCountByDate;
+  final List<String> uploadedSpamData;
+  final List<String> uploadedTime;
+  final List<String> uploadedSender;
 
-  AppDrawer(
-    this.context, {
-    required this.spamMessageCountByDate,
-  });
+  AppDrawer(this.context,
+      {super.key,
+      required this.spamMessageCountByDate,
+      required this.uploadedSpamData,
+      required this.uploadedTime,
+      required this.uploadedSender});
 
   void logout() {
-    // Implement your logout logic here
+    // Implement logout logic here
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -34,17 +40,16 @@ class AppDrawer extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            automaticallyImplyLeading: false, // Removes the back button
+            automaticallyImplyLeading: false,
             backgroundColor: Theme.of(context).primaryColor,
           ),
           ListTile(
             leading: const Icon(Icons.person),
             title: Text(
               'Switch Account',
-              style: _listTileTextStyle, // Apply the TextStyle here
+              style: _listTileTextStyle,
             ),
             onTap: () {
-              // Redirect to the LoginPage when "Switch Account" is tapped
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
@@ -55,15 +60,14 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.settings),
             title: Text(
               'Preferences',
-              style: _listTileTextStyle, // Apply the TextStyle here
+              style: _listTileTextStyle,
             ),
             onTap: () {
-              // Redirect to the Preferences page when "Preferences" is tapped
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        PreferencesPage()), // Replace with your preferences page
+                  builder: (context) => PreferencesPage(),
+                ),
               );
             },
           ),
