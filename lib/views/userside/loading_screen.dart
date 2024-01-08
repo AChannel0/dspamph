@@ -106,7 +106,7 @@ import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:dspamph/login_page.dart';
+import 'package:dspamph/main_login_page.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override

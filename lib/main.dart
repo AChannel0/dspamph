@@ -77,8 +77,6 @@
 
 import 'package:dspamph/views/userside/loading_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:dspamph/views/userside/preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:dspamph/firebase_options.dart';
 
@@ -88,10 +86,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeNotifier(),
-      child: const DSpamPhApp(), // Replace with your main app widget
-    ),
+    const DSpamPhApp(), // Replace with your main app widget
   );
 }
 

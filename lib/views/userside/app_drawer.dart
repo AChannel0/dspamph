@@ -1,7 +1,7 @@
+// app_drawer.dart
 import 'package:flutter/material.dart';
 import 'package:dspamph/views/userside/login_page.dart';
-import 'package:dspamph/views/userside/preferences.dart'; // Import the preferences page
-import 'package:dspamph/views/userside/spam_reports_history.dart';
+import 'package:dspamph/views/userside/about.dart'; // Import the about page
 
 class AppDrawer extends StatelessWidget {
   final BuildContext context;
@@ -57,16 +57,34 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.settings),
+            leading: const Icon(Icons.info), // Added Icon for "About Us"
             title: Text(
-              'Preferences',
+              'About Us',
               style: _listTileTextStyle,
             ),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => PreferencesPage(),
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      AboutPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    const begin = Offset(1.0, 0.0);
+                    const end = Offset.zero;
+                    const curve = Curves.easeInOut;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
                 ),
               );
             },
