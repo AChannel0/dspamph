@@ -37,11 +37,9 @@ class _SpamReportsHistoryPageState extends State<SpamReportsHistoryPage> {
 
   void _initializeDataFetching() async {
     while (!_dataStreamController.isClosed) {
-      // Simulate an asynchronous operation (replace this with your actual data fetching logic)
       await Future.delayed(const Duration(seconds: 5));
 
       if (!_dataStreamController.isClosed) {
-        // Add the latest data to the stream
         _dataStreamController.add(widget.uploadedSpamData);
       }
     }
@@ -55,15 +53,14 @@ class _SpamReportsHistoryPageState extends State<SpamReportsHistoryPage> {
       ),
       body: Column(
         children: [
-          // Display the total count in a rounded container
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey[300], // Lighter grey
+              color: Colors.grey[300],
               borderRadius: BorderRadius.circular(15.0),
             ),
             margin: const EdgeInsets.all(16.0),
             padding: const EdgeInsets.all(16.0),
-            width: double.infinity, // Full width
+            width: double.infinity,
             child: Column(
               children: [
                 Text(
@@ -114,8 +111,6 @@ class _SpamReportsHistoryPageState extends State<SpamReportsHistoryPage> {
   }
 
   Widget _buildSpamReportsList(List<String> data) {
-    // Continue with your list-building logic here
-    // Group spam reports by date
     Map<String, List<int>> dateIndices = {};
     for (int i = 0; i < widget.uploadedTime.length; i++) {
       final timestamp = DateTime.parse(widget.uploadedTime[i]);
@@ -124,7 +119,6 @@ class _SpamReportsHistoryPageState extends State<SpamReportsHistoryPage> {
       dateIndices[dateKey]!.add(i);
     }
 
-    // Create a list of date keys
     List<String> dateKeys = dateIndices.keys.toList();
 
     return ListView.builder(

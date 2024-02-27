@@ -1,107 +1,4 @@
-// import 'package:flutter/material.dart';
-
-// class LoadingScreen extends StatefulWidget {
-//   const LoadingScreen({super.key});
-
-//   @override
-//   _LoadingScreenState createState() => _LoadingScreenState();
-// }
-
-// class _LoadingScreenState extends State<LoadingScreen> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     // initialization
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Image.asset('assets/images/dspamphlogo.png'),
-//     );
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-
-// class LoadingScreen extends StatefulWidget {
-//   @override
-//   _LoadingScreenState createState() => _LoadingScreenState();
-// }
-
-// class _LoadingScreenState extends State<LoadingScreen> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     // You can perform any initialization tasks here, such as loading data or making API calls.
-//     // You can also use a Timer to simulate loading for a certain duration.
-//     // Once the loading is complete, you can navigate to the next screen.
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Loading Screen'),
-//       ),
-//       body: const Center(
-//         child:
-//             CircularProgressIndicator(), // Display a circular progress indicator.
-//       ),
-//     );
-//   }
-// }
-
-// import 'dart:async';
-// import 'package:flutter/material.dart';
-// import 'package:dspamph/selection_page.dart'; // Import the next screen you want to navigate to
-
-// class LoadingScreen extends StatefulWidget {
-//   @override
-//   _LoadingScreenState createState() => _LoadingScreenState();
-// }
-
-// class _LoadingScreenState extends State<LoadingScreen> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     startLoading(); // Start the loading process
-//   }
-
-//   void startLoading() {
-//     // Simulate loading duration using a Timer
-//     Timer(const Duration(seconds: 3), () {
-//       // Replace 3 with the desired loading duration in seconds
-
-//       // Navigate to the next screen after the loading duration
-//       Navigator.pushReplacement(
-//         context,
-//         MaterialPageRoute(
-//           builder: (context) =>
-//               const SelectionPage(), // Replace NextScreen() with the actual next screen widget
-//         ),
-//       );
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor:
-//           Colors.white, // Set the background color of the screen to white
-//       body: Center(
-//         child: Container(
-//           width: 200,
-//           height: 200,
-//           color: Colors
-//               .white, // Set the background color of the container to white
-//           child: Image.asset('assets/images/dspamphlogo.png'),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
+// loading_screen.dart
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
@@ -192,7 +89,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
+      backgroundColor: Colors.white,
       body: Center(
         child: Chewie(
           controller: _chewieController,

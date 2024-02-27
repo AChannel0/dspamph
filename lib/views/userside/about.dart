@@ -87,7 +87,7 @@ class _AboutPageState extends State<AboutPage> {
                   ),
                   SizedBox(height: 10),
                   Container(
-                    height: 500, // Adjust the height of the carousel containers
+                    height: 500,
                     child: Column(
                       children: [
                         CarouselSlider.builder(
@@ -103,7 +103,7 @@ class _AboutPageState extends State<AboutPage> {
                                 ),
                                 color: Colors.orange.shade50,
                                 child: Container(
-                                  width: 350, // Adjust the width as needed
+                                  width: 350,
                                   padding: EdgeInsets.all(20.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

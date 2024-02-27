@@ -1,7 +1,7 @@
 // app_drawer.dart
 import 'package:flutter/material.dart';
 import 'package:dspamph/views/userside/login_page.dart';
-import 'package:dspamph/views/userside/about.dart'; // Import the about page
+import 'package:dspamph/views/userside/about.dart';
 
 class AppDrawer extends StatelessWidget {
   final BuildContext context;
@@ -18,14 +18,12 @@ class AppDrawer extends StatelessWidget {
       required this.uploadedSender});
 
   void logout() {
-    // Implement logout logic here
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
-  // Define a TextStyle with a font size of 20
   final TextStyle _listTileTextStyle = TextStyle(fontSize: 18);
 
   @override
@@ -57,7 +55,7 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.info), // Added Icon for "About Us"
+            leading: const Icon(Icons.info),
             title: Text(
               'About Us',
               style: _listTileTextStyle,

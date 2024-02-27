@@ -27,13 +27,11 @@ class _CalendarNavigationBarState extends State<CalendarNavigationBar> {
   Widget build(BuildContext context) {
     final selectedDateKey = widget.selectedDate.toString().split(' ')[0];
 
-    // Filter spam messages with the prefix "+639"
     final filteredSpamMessages = widget.spamMessages
         .where((message) =>
             message.address != null && message.address!.startsWith("+639"))
         .toList();
 
-    // Get spam messages for the selected date
     final spamMessagesForSelectedDate = widget.spamMessages
         .where((message) =>
             message.address != null &&
@@ -41,7 +39,6 @@ class _CalendarNavigationBarState extends State<CalendarNavigationBar> {
             isSameDay(widget.selectedDate, message.date))
         .toList();
 
-    // Calculate spam count for the filtered messages
     final spamCount = isDateSelected
         ? widget.spamMessageCountByDate[selectedDateKey] ?? 0
         : filteredSpamMessages.length;
@@ -62,12 +59,10 @@ class _CalendarNavigationBarState extends State<CalendarNavigationBar> {
             onDaySelected: (selectedDay, focusedDay) {
               if (selectedDay != null) {
                 widget.onDateSelected(selectedDay);
-                // Set the flag to true when a date is selected
                 setState(() {
                   isDateSelected = true;
                 });
               } else {
-                // Reset the flag to false when no date is selected
                 setState(() {
                   isDateSelected = false;
                 });
